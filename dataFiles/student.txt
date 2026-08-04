@@ -2,3 +2,4 @@ STD001|UC2F2604SE|alex.lee@mail.apu.edu.my|016-5554433|016-5550000 (Father)
 STD003|UC2F2604BIT|ryan.tan@mail.apu.edu.my|011-3332221|011-3339999 (Brother)
 STD004|UC2F2605AP|meera.n@mail.apu.edu.my|019-2228888|019-2221111 (Guardian)
 STD005|UCDF2402ICT|sowserene@gmail.com|010-9410930|019-4081209
+STD006|ucdf134ad|abubakar@gmail.com|0123491934|0152312341

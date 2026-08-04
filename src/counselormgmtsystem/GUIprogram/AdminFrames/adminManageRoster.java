@@ -16,7 +16,7 @@ public class adminManageRoster extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(adminManageRoster.class.getName());
     
     private DefaultTableModel model = new DefaultTableModel();
-    private String[] columnName = new String[]{"Roster ID", "Counselor ID", "Date", "Start Time", "End Time", "Status"};
+    private String[] columnName = new String[]{"Roster ID", "Counselor ID", "Date", "Start Time", "End Time"};
  
     private ArrayList<Roster> rosterRefs = new ArrayList<>();
     private Roster selectedRoster = null;

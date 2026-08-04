@@ -1,83 +1,93 @@
 package counselormgmtsystem;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-
 public class adminGenerateReports extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(adminGenerateReports.class.getName());
     private DefaultTableModel model = new DefaultTableModel();
     private Admin currentAdmin;
-    
+
     public adminGenerateReports(Admin admin) {
-        this.currentAdmin = admin; 
+        this.currentAdmin = admin;
         if (FileHandler.apptList.isEmpty()) {
-              new FileHandler().loadDataFromFiles();
+            new FileHandler().loadDataFromFiles();
         }
         initComponents();
         jTable1.setModel(model);
-        
+
         JTextField[] displayFields = {totalTf, completedTf, pendingTf, cancelledTf};
         for (JTextField tf : displayFields) {
             tf.setEditable(false);
             tf.setHorizontalAlignment(JTextField.CENTER);
             tf.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 18));
         }
-        
+
         updateUIForCategory();
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     //getters so admin can update ui
-    public DefaultTableModel getModel() { return model; }
-    public javax.swing.JTextField getTotalTf() { return totalTf; }
-    public javax.swing.JTextField getCompletedTf() { return completedTf; }
-    public javax.swing.JTextField getPendingTf() { return pendingTf; }
-    public javax.swing.JTextField getCancelledTf() { return cancelledTf; }
-    
+    public DefaultTableModel getModel() {
+        return model;
+    }
+
+    public javax.swing.JTextField getTotalTf() {
+        return totalTf;
+    }
+
+    public javax.swing.JTextField getCompletedTf() {
+        return completedTf;
+    }
+
+    public javax.swing.JTextField getPendingTf() {
+        return pendingTf;
+    }
+
+    public javax.swing.JTextField getCancelledTf() {
+        return cancelledTf;
+    }
+
     private void updateUIForCategory() {
         String category = (String) jComboBox2.getSelectedItem();
-        
+
         //reset Text Fields
         totalTf.setText("");
         completedTf.setText("");
         pendingTf.setText("");
         cancelledTf.setText("");
-        
+
         if (category.equals("Appointments")) {
             jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Total"));
             jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder("Completed"));
-            
+
             //show all boxes
             jPanel15.setVisible(true);
             jPanel14.setVisible(true);
-            
+
             model.setColumnIdentifiers(new String[]{"Appt ID", "Student ID", "Counselor ID", "Date", "Time", "Type", "Queue", "Status"});
-            
+
         } else if (category.equals("Counselor Workload")) {
             jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Total Counselors"));
             jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder("Active Counselors"));
-            
+
             //hide boxes
             jPanel15.setVisible(false);
             jPanel14.setVisible(false);
-            
+
             model.setColumnIdentifiers(new String[]{"Counselor ID", "Total Bookings Handled"});
-            
+
         } else if (category.equals("Consultation Records")) {
             jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Total Records"));
             jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder("Unique Students"));
-            
+
             jPanel15.setVisible(false);
             jPanel14.setVisible(false);
-            
+
             model.setColumnIdentifiers(new String[]{"Record ID", "Appt ID", "Student ID", "Counselor ID", "Date", "Notes"});
         }
     }
@@ -294,7 +304,6 @@ public class adminGenerateReports extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 
-
     private void totalTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalTfActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_totalTfActionPerformed
@@ -316,40 +325,132 @@ public class adminGenerateReports extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "The table is empty. Generate a report first before exporting.", "Export Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
+        // Dropdown option for export type
+        String[] options = {"Export as PDF", "Export as Excel (CSV)"};
+        int choice = JOptionPane.showOptionDialog(
+                this,
+                "Select the format you would like to export the report to:",
+                "Choose Export Format",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        if (choice == 0) {
+            exportToPDF();
+        } else if (choice == 1) {
+            exportToExcel();
+        }
+    }//GEN-LAST:event_exportBtnActionPerformed
+
+    private void exportToPDF() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Save Report As PDF");
-        fileChooser.setSelectedFile(new File((String)jComboBox2.getSelectedItem() + "_Report.pdf"));
-        
+        String category = (String) jComboBox2.getSelectedItem();
+        fileChooser.setSelectedFile(new java.io.File(category.replaceAll("\\s+", "_") + "_Report.pdf"));
+
         int userSelection = fileChooser.showSaveDialog(this);
-        
+
         if (userSelection == JFileChooser.APPROVE_OPTION) {
-            File fileToSave = fileChooser.getSelectedFile();
-            
+            java.io.File fileToSave = fileChooser.getSelectedFile();
+
+            // Ensure .pdf extension
+            if (!fileToSave.getName().toLowerCase().endsWith(".pdf")) {
+                fileToSave = new java.io.File(fileToSave.getAbsolutePath() + ".pdf");
+            }
+
+            try {
+                // 1. Setup Header and Footer
+                String reportTitle = category + " Report (" + jComboBox1.getSelectedItem() + ")";
+                java.text.MessageFormat header = new java.text.MessageFormat(reportTitle);
+                java.text.MessageFormat footer = new java.text.MessageFormat("Page - {0}");
+
+                // 2. Configure Print Attributes to target PDF / File Stream
+                javax.print.attribute.HashPrintRequestAttributeSet attr = new javax.print.attribute.HashPrintRequestAttributeSet();
+                attr.add(javax.print.attribute.standard.OrientationRequested.LANDSCAPE); // Fits wide tables better
+
+                // Check if any Print Service exists
+                javax.print.PrintService[] services = java.awt.print.PrinterJob.lookupPrintServices();
+                if (services.length == 0) {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "No Print Service or Virtual PDF Printer found on your system!\n\n"
+                            + "Please enable 'Microsoft Print to PDF' (Windows) or 'Save as PDF' in your OS settings,\n"
+                            + "or use the 'Export as Excel (CSV)' option instead.",
+                            "Print Service Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                    return;
+                }
+
+                // 3. Print the JTable
+                boolean complete = jTable1.print(
+                        javax.swing.JTable.PrintMode.FIT_WIDTH,
+                        header,
+                        footer,
+                        false, // set to false so it doesn't force a native print dialog if headless
+                        attr,
+                        true
+                );
+
+                if (complete) {
+                    JOptionPane.showMessageDialog(this, "PDF Report successfully generated!", "Export Success", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (java.awt.print.PrinterException e) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Could not complete PDF export: " + e.getMessage() + "\n\nTip: You can export as Excel (CSV) as an alternative!",
+                        "Export Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+    }
+
+    // --- 2. EXCEL EXPORT (.CSV FORMAT) ---
+    private void exportToExcel() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save Report As Excel / CSV");
+        String category = (String) jComboBox2.getSelectedItem();
+        fileChooser.setSelectedFile(new java.io.File(category.replaceAll("\\s+", "_") + "_Report.csv"));
+
+        int userSelection = fileChooser.showSaveDialog(this);
+
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            java.io.File fileToSave = fileChooser.getSelectedFile();
+
+            if (!fileToSave.getName().toLowerCase().endsWith(".csv")) {
+                fileToSave = new java.io.File(fileToSave.getAbsolutePath() + ".csv");
+            }
+
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileToSave))) {
-                
-                //write header row
+
+                // Write Excel Column Headers
                 for (int i = 0; i < model.getColumnCount(); i++) {
-                    writer.write(model.getColumnName(i) + (i == model.getColumnCount() - 1 ? "" : ","));
+                    writer.write("\"" + model.getColumnName(i) + "\"" + (i == model.getColumnCount() - 1 ? "" : ","));
                 }
                 writer.newLine();
-                
-                //write data rows
+
+                // Write Data Rows
                 for (int row = 0; row < model.getRowCount(); row++) {
                     for (int col = 0; col < model.getColumnCount(); col++) {
                         Object val = model.getValueAt(row, col);
-                        writer.write((val != null ? val.toString() : "") + (col == model.getColumnCount() - 1 ? "" : ","));
+                        String strVal = (val != null) ? val.toString().replace("\"", "\"\"") : "";
+                        writer.write("\"" + strVal + "\"" + (col == model.getColumnCount() - 1 ? "" : ","));
                     }
                     writer.newLine();
                 }
-                
-                JOptionPane.showMessageDialog(this, "Report successfully saved to:\n" + fileToSave.getAbsolutePath(), "Export Success", JOptionPane.INFORMATION_MESSAGE);
-                
+
+                JOptionPane.showMessageDialog(this, "Excel Report successfully saved to:\n" + fileToSave.getAbsolutePath(), "Export Success", JOptionPane.INFORMATION_MESSAGE);
+
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Error writing file: " + e.getMessage(), "Export Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error exporting to Excel: " + e.getMessage(), "Export Error", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }//GEN-LAST:event_exportBtnActionPerformed
+    }
 
     private void generateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateBtnActionPerformed
         String category = (String) jComboBox2.getSelectedItem();
@@ -358,10 +459,10 @@ public class adminGenerateReports extends javax.swing.JFrame {
         String dateStr = dateTf.getText().trim();
 
         currentAdmin.generateReport(category, timeframe, yearStr, dateStr, this);
-        
+
         }//GEN-LAST:event_generateBtnActionPerformed
 
-    
+
     private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         updateUIForCategory();    }//GEN-LAST:event_jComboBox2ActionPerformed
 
@@ -425,4 +526,3 @@ public class adminGenerateReports extends javax.swing.JFrame {
     private javax.swing.JTextField yearTf;
     // End of variables declaration//GEN-END:variables
 }
-

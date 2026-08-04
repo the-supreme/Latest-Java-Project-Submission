@@ -283,7 +283,7 @@ public class adminManageRecep extends javax.swing.JFrame {
                 return; 
             }
 
-        String newID = currentAdmin.generateNextReceptionistID();        
+        String newID = FileHandler.generateUserID("REC", FileHandler.userList, User::getID);
         String username = nameTf.getText().trim().toLowerCase().replaceAll("\\s+", ".");
         String selectedStatus = statusCb.getSelectedItem().toString();  
         

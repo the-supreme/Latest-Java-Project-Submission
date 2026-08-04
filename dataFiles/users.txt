@@ -10,3 +10,5 @@ STD003|ryan_tan|stdPass3|Ryan Tan Meng|Active
 STD004|meera_nair|stdPass4|Meera Nair|Active
 REC002|suranjan|Admin1234|SURANJAN|Active
 STD005|sow_serene12|s2r2n3@123|Sow Serene|Active
+STD006|abu|abubakar|Abu|Active
+REC003|ali|ali@01933|ali|Active

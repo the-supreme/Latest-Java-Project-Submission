@@ -346,7 +346,7 @@ public class adminManageCounselor extends javax.swing.JFrame {
         }
 
         //generate data
-        String newID = currentAdmin.generateNextCounselorID();
+        String newID = FileHandler.generateUserID("CNS", FileHandler.userList, User::getID);
         String username = nameTf.getText().trim().toLowerCase().replaceAll("\\s+", ".");
         String selectedStatus = statusCb.getSelectedItem().toString();
 

@@ -54,35 +54,35 @@ public class Admin extends User {
     }
 
     // --- ID GENERATION METHODS ---
-    public String generateNextReceptionistID() {
-        int max = 0;
-        for (User u : FileHandler.userList) {
-            if (u instanceof Receptionist && u.ID != null && u.ID.startsWith("REC")) {
-                try {
-                    int num = Integer.parseInt(u.ID.substring(3));
-                    if (num > max) {
-                        max = num;
-                    }
-                } catch (NumberFormatException ignored) {}
-            }
-        }
-        return String.format("REC%03d", max + 1);
-    }
-
-    public String generateNextCounselorID() {
-        int max = 0;
-        for (User u : FileHandler.userList) {
-            if (u instanceof Counselor && u.ID != null && u.ID.startsWith("CNS")) {
-                try {
-                    int num = Integer.parseInt(u.ID.substring(3));
-                    if (num > max) {
-                        max = num;
-                    }
-                } catch (NumberFormatException ignored) {}
-            }
-        }
-        return String.format("CNS%03d", max + 1);
-    }
+//    public String generateNextReceptionistID() {
+//        int max = 0;
+//        for (User u : FileHandler.userList) {
+//            if (u instanceof Receptionist && u.ID != null && u.ID.startsWith("REC")) {
+//                try {
+//                    int num = Integer.parseInt(u.ID.substring(3));
+//                    if (num > max) {
+//                        max = num;
+//                    }
+//                } catch (NumberFormatException ignored) {}
+//            }
+//        }
+//        return String.format("REC%03d", max + 1);
+//    }
+//
+//    public String generateNextCounselorID() {
+//        int max = 0;
+//        for (User u : FileHandler.userList) {
+//            if (u instanceof Counselor && u.ID != null && u.ID.startsWith("CNS")) {
+//                try {
+//                    int num = Integer.parseInt(u.ID.substring(3));
+//                    if (num > max) {
+//                        max = num;
+//                    }
+//                } catch (NumberFormatException ignored) {}
+//            }
+//        }
+//        return String.format("CNS%03d", max + 1);
+//    }
 
     // --- OVERLOAD 1: MANAGE USERS ---
     public void manageRecord(ArrayList<User> userList, User targetUser, String action) {
@@ -130,7 +130,7 @@ public class Admin extends User {
         }
     }
 
-    // --- OVERLOAD 2: MANAGE ROSTER ---
+// overload 2 - manage roster 
     public void manageRecord(ArrayList<Roster> rosterList, Roster targetRoster, String action) {
         if (rosterList == null || targetRoster == null || action == null) {
             System.out.println("Error: invalid arguments supplied to manageRecord().");
@@ -146,7 +146,8 @@ public class Admin extends User {
                         if (num > max) {
                             max = num;
                         }
-                    } catch (NumberFormatException ignored) {}
+                    } catch (NumberFormatException ignored) {
+                    }
                 }
                 targetRoster.setRosterID(String.format("ROS%03d", max + 1));
                 rosterList.add(targetRoster);
@@ -155,9 +156,10 @@ public class Admin extends User {
 
             case "UPDATE":
                 for (int i = 0; i < rosterList.size(); i++) {
-                    if (rosterList.get(i).getRosterID().equalsIgnoreCase(targetRoster.getRosterID())) {
+                    if (rosterList.get(i).getRosterID().equals(targetRoster.getRosterID())) {
                         rosterList.set(i, targetRoster);
                         System.out.println("--- Roster " + targetRoster.getRosterID() + " successfully updated ---");
+                        new FileHandler().saveDataToFiles(); 
                         return;
                     }
                 }
@@ -166,9 +168,10 @@ public class Admin extends User {
 
             case "DELETE":
                 for (int i = 0; i < rosterList.size(); i++) {
-                    if (rosterList.get(i).getRosterID().equalsIgnoreCase(targetRoster.getRosterID())) {
+                    if (rosterList.get(i).getRosterID().equals(targetRoster.getRosterID())) {
                         rosterList.remove(i);
                         System.out.println("--- Roster " + targetRoster.getRosterID() + " successfully deleted ---");
+                        new FileHandler().saveDataToFiles(); 
                         return;
                     }
                 }
@@ -179,9 +182,9 @@ public class Admin extends User {
                 System.out.println("Error: unsupported action \"" + action + "\". Use ADD, UPDATE, or DELETE.");
         }
 
-        FileHandler.saveDataToFiles();
+        new FileHandler().saveDataToFiles(); 
     }
-
+    
     // --- VALIDATION METHOD FOR ROSTER CREATION/EDITING ---
     public String validateData(String counselorId, String dateStr, String startStr, String endStr, String currentRosterId) {
         if (counselorId.trim().isEmpty() || dateStr.trim().isEmpty() || startStr.trim().isEmpty() || endStr.trim().isEmpty()) {
