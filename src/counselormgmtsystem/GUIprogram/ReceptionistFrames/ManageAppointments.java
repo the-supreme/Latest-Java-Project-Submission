@@ -1,4 +1,4 @@
- /*
+/*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
@@ -13,8 +13,11 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -186,6 +189,51 @@ public class ManageAppointments extends javax.swing.JFrame {
         loadTableData();
     }
 
+    private String validateAppointmentInputs(String startTimeStr, String endTimeStr) {
+        if (startTimeStr.isEmpty()) {
+            return "Start Time cannot be empty.";
+        }
+        if (endTimeStr.isEmpty()) {
+            return "End Time cannot be empty.";
+        }
+
+        LocalTime startTime, endTime;
+
+        // 1. Valid 24-Hour Time Format Check
+        try {
+            startTime = LocalTime.parse(startTimeStr);
+        } catch (DateTimeParseException e) {
+            return "Invalid Start Time! Must be a valid 24-hour time format (e.g. 09:00, 14:30).";
+        }
+
+        try {
+            endTime = LocalTime.parse(endTimeStr);
+        } catch (DateTimeParseException e) {
+            return "Invalid End Time! Must be a valid 24-hour time format (e.g. 10:00, 16:00).";
+        }
+
+        // 2. End Time After Start Time Check
+        if (!endTime.isAfter(startTime)) {
+            return "End Time must be strictly after Start Time.";
+        }
+
+        // 3. Duration Limit Check (1 to 2 hours)
+        long durationMins = Duration.between(startTime, endTime).toMinutes();
+        if (durationMins < 60 || durationMins > 120) {
+            return "Appointment duration must be between 1 hour (60 mins) and 2 hours (120 mins).";
+        }
+
+        // 4. Operating Hours Check (08:00 to 17:00)
+        LocalTime workStart = LocalTime.of(8, 0);
+        LocalTime workEnd = LocalTime.of(17, 0);
+
+        if (startTime.isBefore(workStart) || endTime.isAfter(workEnd)) {
+            return "Appointments must be scheduled within working hours (08:00 to 17:00).";
+        }
+
+        return null; // Passes all checks!
+    }
+
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         JComboBox<String> studentCB = new JComboBox<>();
         for (User u : FileHandler.userList) {
@@ -234,8 +282,9 @@ public class ManageAppointments extends javax.swing.JFrame {
             String startTime = startTimeTF.getText().trim();
             String endTime = endTimeTF.getText().trim();
 
-            if (startTime.isEmpty() || endTime.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Start Time and End Time are required!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+            String error = validateAppointmentInputs(startTime, endTime);
+            if (error != null) {
+                JOptionPane.showMessageDialog(this, error, "Validation Error", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
@@ -244,18 +293,17 @@ public class ManageAppointments extends javax.swing.JFrame {
 
             // Create complete Appointment object
             Appointment tempAppt = new Appointment(
-                nextApptID, 
-                nextQueueNo, 
-                studentID, 
-                "TBD", // Counselor ID initially unassigned / TBD
-                apptDate, 
-                startTime, 
-                endTime, 
-                bookingType, 
-                "Scheduled"
+                    nextApptID,
+                    nextQueueNo,
+                    studentID,
+                    "TBD", // Counselor ID initially unassigned / TBD
+                    apptDate,
+                    startTime,
+                    endTime,
+                    bookingType,
+                    "Scheduled"
             );
 
-            // Invoking Overloaded method in Receptionist
             boolean success = currentReceptionist.manageRecords("CREATE", tempAppt);
 
             if (success) {
@@ -352,6 +400,12 @@ public class ManageAppointments extends javax.swing.JFrame {
             String updatedDate = (String) dateCB.getSelectedItem();
             String updatedStartTime = startTimeTF.getText().trim();
             String updatedEndTime = endTimeTF.getText().trim();
+
+            String error = validateAppointmentInputs(updatedStartTime, updatedEndTime);
+            if (error != null) {
+                JOptionPane.showMessageDialog(this, error, "Validation Error", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
 
             Appointment tempAppt = new Appointment(
                     targetAppt.getApptID(), "", updatedStudentID, targetAppt.getCounselorID(), updatedDate, updatedStartTime, updatedEndTime, updatedType, targetAppt.getStatus()
@@ -505,19 +559,20 @@ public class ManageAppointments extends javax.swing.JFrame {
         String selectedApptID = model.getValueAt(selectedRow, 0).toString();
 
         int confirm = JOptionPane.showConfirmDialog(
-                this, "Are you sure you want to cancel and delete Appointment " + selectedApptID + "?", "Confirm Cancel", JOptionPane.YES_NO_OPTION
-        );
+                this, "Are you sure you want to cancel Appointment " + selectedApptID + "?\n(Status will be updated to Cancelled)", "Confirm Cancel", JOptionPane.YES_NO_OPTION
+        ); 
 
         if (confirm == JOptionPane.YES_OPTION) {
-            Appointment tempAppt = new Appointment(selectedApptID, "", "", "", "", "", "", "", "");
-
-            // Invoking Overloaded method in Receptionist
-            boolean success = currentReceptionist.manageRecords("DELETE", tempAppt);
-
-            if (success) {
-                loadTableData();
-                JOptionPane.showMessageDialog(this, "Appointment " + selectedApptID + " cancelled successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            for (Appointment a : FileHandler.apptList) {
+                if (a.getApptID().equalsIgnoreCase(selectedApptID)) {
+                    a.setStatus("Cancelled");
+                    break;
+                }
             }
+
+            FileHandler.saveDataToFiles();
+            loadTableData();
+            JOptionPane.showMessageDialog(this, "Appointment " + selectedApptID + " status updated to Cancelled!", "Success", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_delButtonActionPerformed
 

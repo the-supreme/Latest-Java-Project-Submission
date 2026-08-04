@@ -11,26 +11,27 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
 public class adminManageCounselor extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(adminManageCounselor.class.getName());
 
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = new String[]{"ID", "Full Name", "Contact Number", "Email", "Specialisation", "Status"};
-    
+
     private ArrayList<Counselor> counselorRefs = new ArrayList<>();
     private Counselor selectedCounselor = null;
-    
+
     private Admin currentAdmin;
+
     public adminManageCounselor(Admin admin) {
         this.currentAdmin = admin;
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         if (FileHandler.userList.isEmpty()) {
             new FileHandler().loadDataFromFiles();
         }
-        
+
         model.setColumnIdentifiers(columnName);
         initComponents();
-        statusCb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
+        statusCb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Active", "Inactive"}));
         loadCounselors();
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
@@ -41,8 +42,7 @@ public class adminManageCounselor extends javax.swing.JFrame {
         for (User u : FileHandler.userList) {
             if (u instanceof Counselor c) {
                 counselorRefs.add(c);
-                model.addRow(new Object[]{c.getID(), c.getfullName(), c.getContactNumber(), c.getEmail(), c.getSpecialization(
-                ), c.getStatus()});            
+                model.addRow(new Object[]{c.getID(), c.getfullName(), c.getContactNumber(), c.getEmail(), c.getSpecialization(), c.getStatus()});
             }
         }
         clearFields();
@@ -66,12 +66,12 @@ public class adminManageCounselor extends javax.swing.JFrame {
         String generalQuery = searchTf.getText().trim();
 
         if (generalQuery.isEmpty() || generalQuery.equals("Search...")) {
-            sorter.setRowFilter(null); 
+            sorter.setRowFilter(null);
         } else {
             sorter.setRowFilter(RowFilter.regexFilter("(?i)" + generalQuery, 1, 2, 3));
         }
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -280,31 +280,30 @@ public class adminManageCounselor extends javax.swing.JFrame {
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
         if (selectedCounselor == null) {
             JOptionPane.showMessageDialog(this, "Please select a counselor from the table to edit.", "No Selection", JOptionPane.WARNING_MESSAGE);
-            return; 
+            return;
         }
 
         String pw = new String(passwordTf.getPassword());
 
         String errorMessage = FileHandler.validateData(nameTf.getText(), contactTf.getText(), emailTf.getText(), pw, false, selectedCounselor.getID());
-        if (errorMessage != null) { 
-            JOptionPane.showMessageDialog(this, errorMessage, "Input Error", JOptionPane.WARNING_MESSAGE); 
-            return; 
+        if (errorMessage != null) {
+            JOptionPane.showMessageDialog(this, errorMessage, "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        
 
         selectedCounselor.setFullName(nameTf.getText().trim());
         selectedCounselor.setContactNumber(contactTf.getText().trim());
         selectedCounselor.setEmail(emailTf.getText().trim());
         selectedCounselor.setSpecialization(specialisationTf.getText().trim());
-        selectedCounselor.setStatus(statusCb.getSelectedItem().toString());  
-        
+        selectedCounselor.setStatus(statusCb.getSelectedItem().toString());
+
         if (pw.length() > 0 && !pw.equals("jPasswordField1")) {
             selectedCounselor.setpassword(pw);
         }
 
         currentAdmin.manageRecord(FileHandler.userList, selectedCounselor, "UPDATE");
         new FileHandler().saveDataToFiles();
-        
+
         JOptionPane.showMessageDialog(this, "Counselor account updated successfully.");
         loadCounselors();
     }//GEN-LAST:event_editBtnActionPerformed
@@ -314,40 +313,50 @@ public class adminManageCounselor extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please select a counselor from the table to delete.", "No Selection", JOptionPane.WARNING_MESSAGE);
             return;
         }
- 
-        int confirm = JOptionPane.showConfirmDialog(this, "Delete counselor \"" + selectedCounselor.getfullName() + "\"? This cannot be undone.", "Confirm Delete", JOptionPane.YES_NO_OPTION);
-        
+
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Delete counselor \"" + selectedCounselor.getfullName() + "\"?\nThis will also remove all roster shifts assigned to this counselor.",
+                "Confirm Delete",
+                JOptionPane.YES_NO_OPTION
+        );
+
         if (confirm == JOptionPane.YES_OPTION) {
+            String targetCounselorID = selectedCounselor.getID();
+
             currentAdmin.manageRecord(FileHandler.userList, selectedCounselor, "DELETE");
-            new FileHandler().saveDataToFiles();
-            
-            JOptionPane.showMessageDialog(this, "Counselor account deleted.");
+
+            FileHandler.rosterList.removeIf(roster -> roster.getCounselorID().equals(targetCounselorID));
+
+            FileHandler.saveDataToFiles();
+
+            JOptionPane.showMessageDialog(this, "Counselor account and associated roster shifts deleted.");
             loadCounselors();
         }
     }//GEN-LAST:event_deleteBtnActionPerformed
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         String pw = new String(passwordTf.getPassword());
-        
+
         //validate
         String errorMessage = FileHandler.validateData(nameTf.getText(), contactTf.getText(), emailTf.getText(), pw, true, null);
-        if (errorMessage != null) { 
-            JOptionPane.showMessageDialog(this, errorMessage, "Input Error", JOptionPane.WARNING_MESSAGE); 
-            return; 
+        if (errorMessage != null) {
+            JOptionPane.showMessageDialog(this, errorMessage, "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
         }
 
         //generate data
         String newID = currentAdmin.generateNextCounselorID();
         String username = nameTf.getText().trim().toLowerCase().replaceAll("\\s+", ".");
         String selectedStatus = statusCb.getSelectedItem().toString();
-        
+
         Counselor newC = new Counselor(
-            newID, username, pw, nameTf.getText().trim(), selectedStatus, specialisationTf.getText().trim(), contactTf.getText().trim(), emailTf.getText().trim() 
+                newID, username, pw, nameTf.getText().trim(), selectedStatus, specialisationTf.getText().trim(), contactTf.getText().trim(), emailTf.getText().trim()
         );
 
         currentAdmin.manageRecord(FileHandler.userList, newC, "ADD");
         new FileHandler().saveDataToFiles();
-        
+
         JOptionPane.showMessageDialog(this, "Counselor " + newID + " successfully added.");
         loadCounselors();
     }//GEN-LAST:event_addBtnActionPerformed
@@ -360,8 +369,10 @@ public class adminManageCounselor extends javax.swing.JFrame {
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void recepTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recepTableMouseReleased
-    int viewRow = recepTable.getSelectedRow();
-        if (viewRow < 0) return;
+        int viewRow = recepTable.getSelectedRow();
+        if (viewRow < 0) {
+            return;
+        }
 
         int modelRow = recepTable.convertRowIndexToModel(viewRow);
 
@@ -371,7 +382,7 @@ public class adminManageCounselor extends javax.swing.JFrame {
         contactTf.setText(selectedCounselor.getContactNumber());
         emailTf.setText(selectedCounselor.getEmail());
         specialisationTf.setText(selectedCounselor.getSpecialization());
-        statusCb.setSelectedItem(selectedCounselor.getStatus()); 
+        statusCb.setSelectedItem(selectedCounselor.getStatus());
     }//GEN-LAST:event_recepTableMouseReleased
 
     private void searchTfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchTfKeyPressed
@@ -405,7 +416,7 @@ public class adminManageCounselor extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             Admin mockupAdmin = new Admin("ADM000", "admin", "admin123", "System Admin", "012-3456789", "admin@apu.edu.my", "Room 4.2");
             new adminManageCounselor(mockupAdmin).setVisible(true);
-    });
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

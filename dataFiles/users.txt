@@ -4,9 +4,9 @@ ADM003|evelyn_c|adminPass3|Evelyn Choo|Active
 ADM004|faizal_a|adminPass4|Faizal Ahmed|Active
 CNS001|dr_anand|cnsPass1|Dr. Anand Raj|Inactive
 CNS002|clara_wong|cnsPass2|Clara Wong|Active
-REC001|kumar_dagoat|recPass1|Kumar Anbalagan|Inactive
+REC001|kumar_dagoat|recPass1|Kumar Anbalagan|Active
 STD001|alex_lee|stdPass1|Alex Lee Jia Earn|Active
-STD002|priya_sharma|stdPass2|Priya Sharma|Active
 STD003|ryan_tan|stdPass3|Ryan Tan Meng|Active
 STD004|meera_nair|stdPass4|Meera Nair|Active
 REC002|suranjan|Admin1234|SURANJAN|Active
+STD005|sow_serene12|s2r2n3@123|Sow Serene|Active

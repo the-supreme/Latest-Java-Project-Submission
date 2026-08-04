@@ -216,7 +216,7 @@ public class FileHandler {
                 String adminText = admin.ID + "|" + admin.contactNumber + "|" + admin.email + "|" + admin.officeRoom; 
                 adminList.add(adminText);
             } else if (user instanceof Student student) {
-                String studentText = student.ID + "|" + student.intakeCode + "|" + student.contactNumber + "|" + student.email + "|" + student.emergencyContact; 
+                String studentText = student.ID + "|" + student.intakeCode + "|" + student.email + "|" + student.contactNumber + "|" + student.emergencyContact; 
                 studentList.add(studentText);
             } else if (user instanceof Counselor counselor) {
                 String counselorText = counselor.ID + "|" + counselor.specialization + "|" + counselor.contactNumber + "|" + counselor.email; 

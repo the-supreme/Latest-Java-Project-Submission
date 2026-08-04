@@ -4,26 +4,32 @@ import counselormgmtsystem.GUIprogram.AdminFrames.AdminFrame;
 import counselormgmtsystem.GUIprogram.CounselorFrames.CounselorMainFrame;
 import counselormgmtsystem.GUIprogram.ReceptionistFrames.ReceptionistMainFrame;
 import counselormgmtsystem.GUIprogram.StudentFrames.StudentMainFrame;
-import counselormgmtsystem.Admin;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
+
 /**
  *
  * @author thesupreme
  */
 public class LoginFrame extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(LoginFrame.class.getName());
+
+    private int loginAttempts = 0;
+    private static final int MAX_ATTEMPTS = 3;
+    private Timer lockoutTimer;
+    private int lockoutSecondsRemaining = 30;
 
     /**
      * Creates new form NewJFrame
      */
     public LoginFrame() {
         initComponents();
-        
-        passwordTF.setText(""); 
-        
+
+        passwordTF.setText("");
+
         ImageIcon originalIcon = new ImageIcon(getClass().getResource("/images/login_icon.png"));
         Image rawImage = originalIcon.getImage();
         Image resizedImage = rawImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
@@ -162,7 +168,7 @@ public class LoginFrame extends javax.swing.JFrame {
 
     private void loginIconActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginIconActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_loginIconActionPerformed
 
     private void usernameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameTFActionPerformed
@@ -170,60 +176,90 @@ public class LoginFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameTFActionPerformed
 
     private void loginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginBtnActionPerformed
-        // TODO add your handling code here:
-        String username = usernameTF.getText();
-        char[] password = passwordTF.getPassword();
-        String passwordText = new String(password);
-        boolean isValidUser = false;
-        String currentUserRole = "";
-        User currentUser = null;
+        String username = usernameTF.getText().trim();
+        String passwordText = new String(passwordTF.getPassword()).trim();
 
-        for (User user: FileHandler.userList) {
+        // 1. MANDATORY INPUT CHECK
+        if (username.isEmpty() || passwordText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter both Username and Password.", "Input Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        User authenticatedUser = null;
+
+        // 2. USER AUTHENTICATION & STATUS CHECK
+        for (User user : FileHandler.userList) {
             if (username.equals(user.username) && passwordText.equals(user.password)) {
-                isValidUser = true;
-                currentUser = user;
-                if (user.ID.startsWith("ADM")) {
-                    currentUserRole = "admin";
-                }
-                else if (user.ID.startsWith("CNS")) {
-                    currentUserRole = "counselor";
-                }
-                else if (user.ID.startsWith("STD")) {
-                    currentUserRole = "student";
-                }
-                else if (user.ID.startsWith("REC")) {
-                    currentUserRole = "receptionist";
-                }
-                
+                authenticatedUser = user;
                 break;
             }
         }
-                
-        if (isValidUser == true) {
+
+        if (authenticatedUser != null) {
+            // Check Account Status
+            String status = (authenticatedUser.status != null) ? authenticatedUser.status : "Active";
+            if (status.equalsIgnoreCase("Inactive")) {
+                JOptionPane.showMessageDialog(this, "Your account is currently inactive. Please contact the administrator.", "Account Disabled", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // SUCCESSFUL LOGIN: Reset attempt counter and redirect
+            loginAttempts = 0;
             this.dispose();
-            
-            if ("admin".equals(currentUserRole) && currentUser instanceof Admin){
-                AdminFrame adminframe = new AdminFrame((Admin) currentUser);
-                adminframe.setVisible(true);
+
+            if (authenticatedUser instanceof Admin admin) {
+                AdminFrame adminFrame = new AdminFrame(admin);
+                adminFrame.setLocationRelativeTo(null);
+                adminFrame.setVisible(true);
+            } else if (authenticatedUser instanceof Receptionist recep) {
+                ReceptionistMainFrame recepFrame = new ReceptionistMainFrame(recep);
+                recepFrame.setLocationRelativeTo(null);
+                recepFrame.setVisible(true);
+            } else if (authenticatedUser instanceof Counselor counselor) {
+                CounselorMainFrame counselorFrame = new CounselorMainFrame(counselor);
+                counselorFrame.setLocationRelativeTo(null);
+                counselorFrame.setVisible(true);
+            } else if (authenticatedUser instanceof Student student) {
+                StudentMainFrame studentFrame = new StudentMainFrame(student);
+                studentFrame.setLocationRelativeTo(null);
+                studentFrame.setVisible(true);
             }
-            else if ("receptionist".equals(currentUserRole)) {
-                ReceptionistMainFrame recepframe = new ReceptionistMainFrame((Receptionist) currentUser);
-                recepframe.setVisible(true);
+        } else {
+            // 3. FAILED LOGIN ATTEMPT HANDLING
+            loginAttempts++;
+            int remaining = MAX_ATTEMPTS - loginAttempts;
+
+            if (loginAttempts >= MAX_ATTEMPTS) {
+                triggerLockout();
+            } else {
+                JOptionPane.showMessageDialog(this, "Invalid Username or Password.\nAttempts remaining: " + remaining, "Login Failed", JOptionPane.ERROR_MESSAGE);
             }
-            else if ("counselor".equals(currentUserRole)){
-                CounselorMainFrame counselorframe = new CounselorMainFrame((Counselor) currentUser);
-                counselorframe.setVisible(true);
-            }
-            else if ("student".equals(currentUserRole)) {
-                StudentMainFrame studentframe = new StudentMainFrame((Student) currentUser);
-                studentframe.setVisible(true);
-            }
-        }
-        
-        else {
-            JOptionPane.showMessageDialog(this, "Login Failed");
         }
     }//GEN-LAST:event_loginBtnActionPerformed
+
+    private void triggerLockout() {
+        loginBtn.setEnabled(false);
+        usernameTF.setEnabled(false);
+        passwordTF.setEnabled(false);
+        lockoutSecondsRemaining = 30;
+
+        JOptionPane.showMessageDialog(this, "Too many failed attempts! Login system locked for 30 seconds.", "Account Locked", JOptionPane.ERROR_MESSAGE);
+
+        lockoutTimer = new Timer(1000, e -> {
+            lockoutSecondsRemaining--;
+            loginBtn.setText("Locked (" + lockoutSecondsRemaining + "s)");
+
+            if (lockoutSecondsRemaining <= 0) {
+                lockoutTimer.stop();
+                loginAttempts = 0;
+                loginBtn.setText("Login");
+                loginBtn.setEnabled(true);
+                usernameTF.setEnabled(true);
+                passwordTF.setEnabled(true);
+            }
+        });
+        lockoutTimer.start();
+    }
 
     /**
      * @param args the command line arguments
@@ -239,7 +275,7 @@ public class LoginFrame extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        
+
         // read the files and initialize
         FileHandler fh = new FileHandler();
         fh.loadDataFromFiles();

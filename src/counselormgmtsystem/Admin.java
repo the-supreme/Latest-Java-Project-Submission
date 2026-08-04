@@ -1,17 +1,18 @@
 package counselormgmtsystem;
 
 import counselormgmtsystem.GUIprogram.AdminFrames.adminApptStats;
-import counselormgmtsystem.adminGenerateReports;
 import java.util.ArrayList;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Duration;
 import java.time.format.DateTimeParseException;
+import javax.swing.JOptionPane;
 
 public class Admin extends User {
 
-    String contactNumber;
-    String email;
-    String officeRoom;
+    protected String contactNumber;
+    protected String email;
+    protected String officeRoom;
 
     public Admin(String ID, String username, String password, String fullName, String status, String contactNumber, String email, String officeRoom) {
         super(ID, username, password, fullName, status);
@@ -21,11 +22,11 @@ public class Admin extends User {
     }
 
     public Admin(String ID, String username, String password, String fullName, String contactNumber, String email, String officeRoom) {
-        this(ID, username, password, fullName, contactNumber, email, officeRoom, "Active");
+        this(ID, username, password, fullName, "Active", contactNumber, email, officeRoom);
     }
 
     public Admin(String ID, String username, String password, String fullName, String contactNumber, String email) {
-        this(ID, username, password, fullName, contactNumber, email, "TBD", "Active");
+        this(ID, username, password, fullName, "Active", contactNumber, email, "TBD");
     }
 
     public String getContactNumber() {
@@ -52,6 +53,7 @@ public class Admin extends User {
         this.officeRoom = officeRoom;
     }
 
+    // --- ID GENERATION METHODS ---
     public String generateNextReceptionistID() {
         int max = 0;
         for (User u : FileHandler.userList) {
@@ -61,8 +63,7 @@ public class Admin extends User {
                     if (num > max) {
                         max = num;
                     }
-                } catch (NumberFormatException ignored) {
-                }
+                } catch (NumberFormatException ignored) {}
             }
         }
         return String.format("REC%03d", max + 1);
@@ -77,15 +78,13 @@ public class Admin extends User {
                     if (num > max) {
                         max = num;
                     }
-                } catch (NumberFormatException ignored) {
-                    // skip malformed IDs
-                }
+                } catch (NumberFormatException ignored) {}
             }
         }
         return String.format("CNS%03d", max + 1);
     }
 
-    // overload 1 - manage users
+    // --- OVERLOAD 1: MANAGE USERS ---
     public void manageRecord(ArrayList<User> userList, User targetUser, String action) {
         if (userList == null || targetUser == null || action == null) {
             System.out.println("Error: invalid arguments supplied to manageRecord().");
@@ -95,7 +94,7 @@ public class Admin extends User {
         switch (action.trim().toUpperCase()) {
             case "ADD":
                 for (User u : userList) {
-                    if (u.ID.equals(targetUser.ID)) {
+                    if (u.ID.equalsIgnoreCase(targetUser.ID)) {
                         System.out.println("Error: a user with ID " + targetUser.ID + " already exists.");
                         return;
                     }
@@ -106,7 +105,7 @@ public class Admin extends User {
 
             case "UPDATE":
                 for (int i = 0; i < userList.size(); i++) {
-                    if (userList.get(i).ID.equals(targetUser.ID)) {
+                    if (userList.get(i).ID.equalsIgnoreCase(targetUser.ID)) {
                         userList.set(i, targetUser);
                         System.out.println("--- Account " + targetUser.ID + " successfully updated ---");
                         return;
@@ -117,7 +116,7 @@ public class Admin extends User {
 
             case "DELETE":
                 for (int i = 0; i < userList.size(); i++) {
-                    if (userList.get(i).ID.equals(targetUser.ID)) {
+                    if (userList.get(i).ID.equalsIgnoreCase(targetUser.ID)) {
                         userList.remove(i);
                         System.out.println("--- Account " + targetUser.ID + " successfully deleted ---");
                         return;
@@ -131,7 +130,7 @@ public class Admin extends User {
         }
     }
 
-    // overload 2 - manage roster 
+    // --- OVERLOAD 2: MANAGE ROSTER ---
     public void manageRecord(ArrayList<Roster> rosterList, Roster targetRoster, String action) {
         if (rosterList == null || targetRoster == null || action == null) {
             System.out.println("Error: invalid arguments supplied to manageRecord().");
@@ -147,8 +146,7 @@ public class Admin extends User {
                         if (num > max) {
                             max = num;
                         }
-                    } catch (NumberFormatException ignored) {
-                    }
+                    } catch (NumberFormatException ignored) {}
                 }
                 targetRoster.setRosterID(String.format("ROS%03d", max + 1));
                 rosterList.add(targetRoster);
@@ -157,7 +155,7 @@ public class Admin extends User {
 
             case "UPDATE":
                 for (int i = 0; i < rosterList.size(); i++) {
-                    if (rosterList.get(i).getRosterID().equals(targetRoster.getRosterID())) {
+                    if (rosterList.get(i).getRosterID().equalsIgnoreCase(targetRoster.getRosterID())) {
                         rosterList.set(i, targetRoster);
                         System.out.println("--- Roster " + targetRoster.getRosterID() + " successfully updated ---");
                         return;
@@ -168,7 +166,7 @@ public class Admin extends User {
 
             case "DELETE":
                 for (int i = 0; i < rosterList.size(); i++) {
-                    if (rosterList.get(i).getRosterID().equals(targetRoster.getRosterID())) {
+                    if (rosterList.get(i).getRosterID().equalsIgnoreCase(targetRoster.getRosterID())) {
                         rosterList.remove(i);
                         System.out.println("--- Roster " + targetRoster.getRosterID() + " successfully deleted ---");
                         return;
@@ -181,9 +179,10 @@ public class Admin extends User {
                 System.out.println("Error: unsupported action \"" + action + "\". Use ADD, UPDATE, or DELETE.");
         }
 
-        new FileHandler().saveDataToFiles();
+        FileHandler.saveDataToFiles();
     }
 
+    // --- VALIDATION METHOD FOR ROSTER CREATION/EDITING ---
     public String validateData(String counselorId, String dateStr, String startStr, String endStr, String currentRosterId) {
         if (counselorId.trim().isEmpty() || dateStr.trim().isEmpty() || startStr.trim().isEmpty() || endStr.trim().isEmpty()) {
             return "Counselor ID, Date, Start Time and End Time are required.";
@@ -191,7 +190,7 @@ public class Admin extends User {
 
         boolean counselorExists = false;
         for (User u : FileHandler.userList) {
-            if (u instanceof Counselor && u.ID.equals(counselorId.trim())) {
+            if (u instanceof Counselor && u.ID.equalsIgnoreCase(counselorId.trim())) {
                 counselorExists = true;
 
                 String userStatus = (u.status != null) ? u.status : "";
@@ -226,12 +225,11 @@ public class Admin extends User {
             return "End Time must be after Start Time.";
         }
 
-        // --- NEW VALIDATION: Timeframe must be between 1 and 2 hours ---
-        long durationMinutes = java.time.Duration.between(startTime, endTime).toMinutes();
+        // Timeframe validation: must be between 1 and 2 hours
+        long durationMinutes = Duration.between(startTime, endTime).toMinutes();
         if (durationMinutes < 60 || durationMinutes > 120) {
             return "A roster slot must be between 1 and 2 hours long.";
         }
-        // ---------------------------------------------------------------
 
         LocalTime shiftStartLimit = LocalTime.of(8, 0);  // 08:00
         LocalTime shiftEndLimit = LocalTime.of(17, 0); // 17:00
@@ -249,10 +247,10 @@ public class Admin extends User {
         }
 
         for (Roster r : FileHandler.rosterList) {
-            if (currentRosterId != null && r.rosterID.equals(currentRosterId)) {
+            if (currentRosterId != null && r.rosterID.equalsIgnoreCase(currentRosterId)) {
                 continue;
             }
-            if (r.counselorID.equals(counselorId.trim()) && r.date.equals(dateStr.trim())) {
+            if (r.counselorID.equalsIgnoreCase(counselorId.trim()) && r.date.equals(dateStr.trim())) {
                 LocalTime existingStart = LocalTime.parse(r.startTime);
                 LocalTime existingEnd = LocalTime.parse(r.endTime);
 
@@ -265,12 +263,13 @@ public class Admin extends User {
         return null;
     }
 
+    // --- APPOINTMENT STATISTICS UPDATER ---
     public void updateApptStats(String dateFilter, adminApptStats frame) {
         int total = 0, completed = 0, cancelled = 0, pending = 0;
         int morningCount = 0, afternoonCount = 0, onlineCount = 0, walkInCount = 0;
 
-        java.util.ArrayList<String> counselorIds = new java.util.ArrayList<>();
-        java.util.ArrayList<Integer> counts = new java.util.ArrayList<>();
+        ArrayList<String> counselorIds = new ArrayList<>();
+        ArrayList<Integer> counts = new ArrayList<>();
 
         for (Appointment appt : FileHandler.apptList) {
             if (dateFilter != null && !dateFilter.trim().isEmpty()) {
@@ -335,6 +334,7 @@ public class Admin extends User {
         }
     }
 
+    // --- REPORT GENERATOR ---
     public void generateReport(String category, String timeframe, String yearStr, String dateStr, adminGenerateReports frame) {
         String filterMatch = "";
         int targetQuarter = 0;
@@ -370,11 +370,10 @@ public class Admin extends User {
                 }
             }
         } catch (Exception e) {
-            javax.swing.JOptionPane.showMessageDialog(frame, e.getMessage(), "Input Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, e.getMessage(), "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // --- DATA GENERATION ---
         frame.getModel().setRowCount(0);
 
         if (category.equals("Appointments")) {
@@ -410,8 +409,8 @@ public class Admin extends User {
             frame.getCancelledTf().setText(String.valueOf(cancelled));
 
         } else if (category.equals("Counselor Workload")) {
-            java.util.ArrayList<String> counselorIds = new java.util.ArrayList<>();
-            java.util.ArrayList<Integer> counts = new java.util.ArrayList<>();
+            ArrayList<String> counselorIds = new ArrayList<>();
+            ArrayList<Integer> counts = new ArrayList<>();
 
             for (Appointment appt : FileHandler.apptList) {
                 if (checkDateMatch(appt.getDate(), filterMatch, timeframe, targetQuarter) && !appt.getStatus().equalsIgnoreCase("Cancelled")) {
@@ -434,7 +433,7 @@ public class Admin extends User {
 
         } else if (category.equals("Consultation Records")) {
             int total = 0;
-            java.util.ArrayList<String> uniqueStudents = new java.util.ArrayList<>();
+            ArrayList<String> uniqueStudents = new ArrayList<>();
 
             for (ConsultationRecords record : FileHandler.consultList) {
                 if (checkDateMatch(record.getDate(), filterMatch, timeframe, targetQuarter)) {
@@ -450,11 +449,10 @@ public class Admin extends User {
         }
 
         if (frame.getModel().getRowCount() == 0) {
-            javax.swing.JOptionPane.showMessageDialog(frame, "No records found for this timeframe.", "Report Result", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "No records found for this timeframe.", "Report Result", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
-    // helper method for date filtering
     public boolean checkDateMatch(String recordDate, String filterMatch, String timeframe, int targetQuarter) {
         if (timeframe.equals("Quarterly")) {
             if (!recordDate.startsWith(filterMatch)) {
@@ -472,6 +470,7 @@ public class Admin extends User {
         }
     }
 
+    // --- APPOINTMENT CANCELLATION ---
     public String cancelAppointment(Appointment appt) {
         if (appt == null) {
             return "No appointment selected.";
@@ -483,17 +482,7 @@ public class Admin extends User {
 
         appt.setStatus("Cancelled");
 
-        for (Roster r : FileHandler.rosterList) {
-            if (r.getCounselorID().equals(appt.getCounselorID())
-                    && r.getDate().equals(appt.getDate())
-                    && r.getStartTime().equals(appt.getStartTime())) {
-
-                break;
-            }
-        }
-
-        new FileHandler().saveDataToFiles();
-
+        FileHandler.saveDataToFiles();
         return null;
     }
 
