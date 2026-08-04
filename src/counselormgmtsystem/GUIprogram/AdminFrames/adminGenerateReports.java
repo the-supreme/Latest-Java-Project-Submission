@@ -32,6 +32,7 @@ public class adminGenerateReports extends javax.swing.JFrame {
         }
         
         updateUIForCategory();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     //getters so admin can update ui

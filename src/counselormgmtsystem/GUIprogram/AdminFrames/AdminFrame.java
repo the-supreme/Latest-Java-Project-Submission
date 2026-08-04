@@ -17,8 +17,7 @@ import javax.swing.JOptionPane;
  *
  * @author thesupreme
  */
-  
-
+ 
     public class AdminFrame extends javax.swing.JFrame {
 
         private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AdminFrame.class.getName());
@@ -35,7 +34,9 @@ import javax.swing.JOptionPane;
                 new FileHandler().loadDataFromFiles();
             }
 
+             
             try {
+                
                 ImageIcon originalUserIcon = new ImageIcon(getClass().getResource("/images/user (1).png"));
                 usernameText.setText(admin.getUsername());
                 adminPageUserIcon.setIcon(new ImageIcon(originalUserIcon.getImage().getScaledInstance(140, 140, Image.SCALE_SMOOTH)));
@@ -546,28 +547,24 @@ import javax.swing.JOptionPane;
         manageUsersAdmin userPage = new manageUsersAdmin(this.currentAdmin);
         userPage.setLocationRelativeTo(null);
         userPage.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_navItem01MouseClicked
 
     private void navItem02MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem02MouseClicked
         adminManageRoster rosterPage = new adminManageRoster(this.currentAdmin);
         rosterPage.setLocationRelativeTo(null);
         rosterPage.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_navItem02MouseClicked
 
     private void navItem03MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem03MouseClicked
         adminApptStats apptStatsPage = new adminApptStats(this.currentAdmin);
         apptStatsPage.setLocationRelativeTo(null);
         apptStatsPage.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_navItem03MouseClicked
 
     private void navItem04MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem04MouseClicked
         adminGenerateReports reportPage = new adminGenerateReports(this.currentAdmin);
         reportPage.setLocationRelativeTo(null);
         reportPage.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_navItem04MouseClicked
 
     /**

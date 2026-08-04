@@ -617,28 +617,24 @@ public class CounselorMainFrame extends javax.swing.JFrame {
         ViewRosterFrame userPage = new ViewRosterFrame(this.currentCounselor);
         userPage.setLocationRelativeTo(null);
         userPage.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_navItem01MouseClicked
 
     private void navItem02MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem02MouseClicked
         ViewAssignedAppointmentsFrame apptPage = new ViewAssignedAppointmentsFrame(this.currentCounselor);
         apptPage.setLocationRelativeTo(null);
         apptPage.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_navItem02MouseClicked
 
     private void navItem03MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem03MouseClicked
         StudentConsultationRecordsFrame consultPage = new StudentConsultationRecordsFrame(this.currentCounselor);
         consultPage.setLocationRelativeTo(null);
         consultPage.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_navItem03MouseClicked
 
     private void navItem04MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem04MouseClicked
         AddConsultationNoteFrame notePage = new AddConsultationNoteFrame(this.currentCounselor);
         notePage.setLocationRelativeTo(null);
         notePage.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_navItem04MouseClicked
 
     

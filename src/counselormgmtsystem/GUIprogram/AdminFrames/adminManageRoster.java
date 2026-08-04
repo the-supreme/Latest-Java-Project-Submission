@@ -14,7 +14,7 @@ import javax.swing.table.TableRowSorter;
 public class adminManageRoster extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(adminManageRoster.class.getName());
- 
+    
     private DefaultTableModel model = new DefaultTableModel();
     private String[] columnName = new String[]{"Roster ID", "Counselor ID", "Date", "Start Time", "End Time", "Status"};
  
@@ -24,7 +24,6 @@ public class adminManageRoster extends javax.swing.JFrame {
 
     public adminManageRoster(Admin admin) {
         this.currentAdmin = admin;
-        
         if (FileHandler.rosterList.isEmpty()) {
             new FileHandler().loadDataFromFiles();
         }
@@ -33,6 +32,7 @@ public class adminManageRoster extends javax.swing.JFrame {
         initComponents();
         statusCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Booked" }));
         loadRosters();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
     
     @SuppressWarnings("unchecked")
@@ -326,7 +326,6 @@ public class adminManageRoster extends javax.swing.JFrame {
         adminViewSchedule viewSchedulePage = new adminViewSchedule(this.currentAdmin);
         viewSchedulePage.setLocationRelativeTo(null);
         viewSchedulePage.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_scheduleBtnActionPerformed
 
 
@@ -349,6 +348,7 @@ public class adminManageRoster extends javax.swing.JFrame {
             Admin mockupAdmin = new Admin("ADM000", "admin", "admin123", "System Admin", "012-3456789", "admin@apu.edu.my", "Room 4.2");
             new adminManageRoster(mockupAdmin).setVisible(true);
         });
+        
     }
     
 

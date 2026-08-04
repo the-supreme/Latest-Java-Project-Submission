@@ -23,7 +23,7 @@ public class manageUsersAdmin extends javax.swing.JFrame {
     public manageUsersAdmin(Admin admin) {
         initComponents();
         this.currentAdmin = admin;
-        
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         try {
             java.net.URL recepUrl = getClass().getResource("/images/recep.png");
             if (recepUrl != null) {

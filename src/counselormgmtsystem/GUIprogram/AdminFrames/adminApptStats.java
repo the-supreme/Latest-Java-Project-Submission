@@ -14,13 +14,13 @@ public class adminApptStats extends javax.swing.JFrame {
 
     public adminApptStats(Admin admin) {
         this.currentAdmin = admin;
-        
         if (FileHandler.apptList.isEmpty()) {
             new FileHandler().loadDataFromFiles();
         }
         
         model.setColumnIdentifiers(new String[]{"Counselor ID", "Total Bookings Handled"});
         initComponents();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         JTextField[] dashboardFields = {apptBookedTf, apptCompletedTf, apptCancelledTf, 
                                         apptPendingTf, completionRateTf, morningTf, 
                                         afternoonTf, onlineTf, walkInTf};

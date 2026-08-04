@@ -16,7 +16,6 @@ public class adminApptHistory extends javax.swing.JFrame {
     
     public adminApptHistory(Admin admin) {
         this.currentAdmin = admin;
-        
         if (FileHandler.apptList.isEmpty()) {
             new FileHandler().loadDataFromFiles();
         }
@@ -24,6 +23,7 @@ public class adminApptHistory extends javax.swing.JFrame {
         model.setColumnIdentifiers(columnName);
         initComponents();
         loadHistory();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
     
     private void loadHistory() {

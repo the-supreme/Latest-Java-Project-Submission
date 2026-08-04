@@ -33,8 +33,8 @@ public class StudentMainFrame extends javax.swing.JFrame {
             ImageIcon originalUserIcon = new ImageIcon(getClass().getResource("/images/user (1).png"));
             studentPageUserIcon.setIcon(new ImageIcon(originalUserIcon.getImage().getScaledInstance(140, 140, Image.SCALE_SMOOTH)));
             userIcon.setIcon(new ImageIcon(originalUserIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH)));
-            editBtn1.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
-            saveBtn1.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/diskette.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+            editBtn.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+            saveBtn.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/diskette.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
             logoutButton.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/log-out.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
         } catch (Exception e) {
             logger.log(java.util.logging.Level.WARNING, "Image resource loading failed: " + e.getMessage());
@@ -106,7 +106,7 @@ public class StudentMainFrame extends javax.swing.JFrame {
         studentPageUserIcon = new javax.swing.JLabel();
         CNTF2 = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
-        editBtn3 = new javax.swing.JButton();
+        editBtn = new javax.swing.JButton();
         jLabel21 = new javax.swing.JLabel();
         saveBtn = new javax.swing.JButton();
         FNTF2 = new javax.swing.JTextField();
@@ -502,13 +502,13 @@ public class StudentMainFrame extends javax.swing.JFrame {
         jLabel20.setText("Personal Information");
         jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 25, -1, -1));
 
-        editBtn3.setBackground(new java.awt.Color(0, 0, 0));
-        editBtn3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit.png"))); // NOI18N
-        editBtn3.setBorder(null);
-        editBtn3.setBorderPainted(false);
-        editBtn3.setContentAreaFilled(false);
-        editBtn3.addActionListener(this::editBtn3ActionPerformed);
-        jPanel1.add(editBtn3, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 430, 40, 40));
+        editBtn.setBackground(new java.awt.Color(0, 0, 0));
+        editBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit.png"))); // NOI18N
+        editBtn.setBorder(null);
+        editBtn.setBorderPainted(false);
+        editBtn.setContentAreaFilled(false);
+        editBtn.addActionListener(this::editBtnActionPerformed);
+        jPanel1.add(editBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 430, 40, 40));
 
         jLabel21.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         jLabel21.setForeground(new java.awt.Color(0, 0, 0));
@@ -601,24 +601,24 @@ public class StudentMainFrame extends javax.swing.JFrame {
     private void loadStudentData() {
         if (currentStudent != null) {
             usernameText.setText(currentStudent.getUsername());
-            FNTF.setText(currentStudent.getfullName());
-            UNTF.setText(currentStudent.getUsername());
-            EmailTF.setText(currentStudent.getEmail());
-            CNTF.setText(currentStudent.getContactNumber());
+            FNTF2.setText(currentStudent.getfullName());
+            UNTF2.setText(currentStudent.getUsername());
+            EmailTF2.setText(currentStudent.getEmail());
+            CNTF2.setText(currentStudent.getContactNumber());
             ICTF.setText(currentStudent.getIntakeCode());
             ECTF.setText(currentStudent.getEmergencyContact());
         }
     }
 
     private void setEditMode(boolean enable) {
-        FNTF.setEditable(enable);
-        UNTF.setEditable(enable);
-        EmailTF.setEditable(enable);
-        CNTF.setEditable(enable);
+        FNTF2.setEditable(enable);
+        UNTF2.setEditable(enable);
+        EmailTF2.setEditable(enable);
+        CNTF2.setEditable(enable);
         ECTF.setEditable(enable);
 
-        saveBtn1.setEnabled(enable);
-        editBtn1.setEnabled(!enable);
+        saveBtn.setEnabled(enable);
+        editBtn.setEnabled(!enable);
     }
 
     
@@ -659,14 +659,14 @@ public class StudentMainFrame extends javax.swing.JFrame {
 
     private void editBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtn1ActionPerformed
         setEditMode(true);
-        FNTF.requestFocus(); // Place cursor in the first box
+        FNTF2.requestFocus(); // Place cursor in the first box
     }//GEN-LAST:event_editBtn1ActionPerformed
 
     private void saveBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtn1ActionPerformed
-        String newFullName = FNTF.getText().trim();
-        String newUsername = UNTF.getText().trim();
-        String newEmail = EmailTF.getText().trim();
-        String newContact = CNTF.getText().trim();
+        String newFullName = FNTF2.getText().trim();
+        String newUsername = UNTF2.getText().trim();
+        String newEmail = EmailTF2.getText().trim();
+        String newContact = CNTF2.getText().trim();
         String newEmergencyContact = ECTF.getText().trim();
         
 
@@ -737,16 +737,16 @@ public class StudentMainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_CNTF2ActionPerformed
 
-    private void editBtn3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtn3ActionPerformed
+    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
         setEditMode(true);
-        FNTF.requestFocus(); // Place cursor in the first box
-    }//GEN-LAST:event_editBtn3ActionPerformed
+        FNTF2.requestFocus(); // Place cursor in the first box
+    }//GEN-LAST:event_editBtnActionPerformed
 
     private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
-        String newFullName = FNTF.getText().trim();
-        String newUsername = UNTF.getText().trim();
-        String newEmail = EmailTF.getText().trim();
-        String newContact = CNTF.getText().trim();
+        String newFullName = FNTF2.getText().trim();
+        String newUsername = UNTF2.getText().trim();
+        String newEmail = EmailTF2.getText().trim();
+        String newContact = CNTF2.getText().trim();
         String newEmergencyContact = ECTF.getText().trim();
         
 
@@ -848,9 +848,9 @@ public class StudentMainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel contentPanel;
     private javax.swing.JLabel counselorPageUserIcon;
     private javax.swing.JLabel counselorPageUserIcon1;
+    private javax.swing.JButton editBtn;
     private javax.swing.JButton editBtn1;
     private javax.swing.JButton editBtn2;
-    private javax.swing.JButton editBtn3;
     private javax.swing.Box.Filler filler2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

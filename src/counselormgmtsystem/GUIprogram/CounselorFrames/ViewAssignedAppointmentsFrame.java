@@ -24,7 +24,7 @@ public class ViewAssignedAppointmentsFrame extends javax.swing.JFrame {
         initComponents();
 
         FileHandler fileHandler = new FileHandler();
-
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         if (FileHandler.userList.isEmpty() && FileHandler.apptList.isEmpty()) {
             fileHandler.loadDataFromFiles();
         }

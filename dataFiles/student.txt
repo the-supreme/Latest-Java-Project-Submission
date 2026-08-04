@@ -1,4 +1,4 @@
-STD001|UC2F2604SE|016-5554433|alex.lee@mail.apu.edu.my|016-5550000 (Father)
-STD002|UC2F2605CS|018-7776655|priya.s@mail.apu.edu.my|018-7771111 (Mother)
-STD003|UC2F2604BIT|011-3332221|ryan.tan@mail.apu.edu.my|011-3339999 (Brother)
-STD004|UC2F2605AP|019-2228888|meera.n@mail.apu.edu.my|019-2221111 (Guardian)
+STD001|UC2F2604SE|alex.lee@mail.apu.edu.my|016-5554433|016-5550000 (Father)
+STD002|UC2F2605CS|priya.s@mail.apu.edu.my|018-7776655|018-7771111 (Mother)
+STD003|UC2F2604BIT|ryan.tan@mail.apu.edu.my|011-3332221|011-3339999 (Brother)
+STD004|UC2F2605AP|meera.n@mail.apu.edu.my|019-2228888|019-2221111 (Guardian)

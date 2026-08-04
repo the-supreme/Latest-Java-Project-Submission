@@ -23,7 +23,7 @@ public class ViewRosterFrame extends javax.swing.JFrame {
     public ViewRosterFrame(Counselor counselor) {
         this.currentCounselor = counselor;
         initComponents();
-        
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         FileHandler fileHandler = new FileHandler();
 
         if (FileHandler.userList.isEmpty() && FileHandler.rosterList.isEmpty()) {

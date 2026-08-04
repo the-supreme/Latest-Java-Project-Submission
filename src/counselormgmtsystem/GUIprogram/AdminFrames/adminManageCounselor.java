@@ -23,7 +23,7 @@ public class adminManageCounselor extends javax.swing.JFrame {
     private Admin currentAdmin;
     public adminManageCounselor(Admin admin) {
         this.currentAdmin = admin;
-        
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         if (FileHandler.userList.isEmpty()) {
             new FileHandler().loadDataFromFiles();
         }
@@ -32,6 +32,7 @@ public class adminManageCounselor extends javax.swing.JFrame {
         initComponents();
         statusCb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
         loadCounselors();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     private void loadCounselors() {

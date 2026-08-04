@@ -20,7 +20,6 @@ public class adminViewSchedule extends javax.swing.JFrame {
 
     public adminViewSchedule(Admin admin) {
         this.currentAdmin = admin;
-
         if (FileHandler.apptList.isEmpty()) {
             new FileHandler().loadDataFromFiles();
         }
@@ -32,6 +31,7 @@ public class adminViewSchedule extends javax.swing.JFrame {
         model.setColumnIdentifiers(columnName);
         initComponents();
         loadSchedules();
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     private void loadSchedules() {

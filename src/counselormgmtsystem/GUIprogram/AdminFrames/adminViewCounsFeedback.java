@@ -16,7 +16,7 @@ public class adminViewCounsFeedback extends javax.swing.JFrame {
 
     public adminViewCounsFeedback(Admin admin) {
         this.currentAdmin = admin;
-        
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         if (FileHandler.feedbackList.isEmpty()) {
             new FileHandler().loadDataFromFiles();
         }
@@ -25,7 +25,7 @@ public class adminViewCounsFeedback extends javax.swing.JFrame {
         model.setColumnIdentifiers(columnName);
         
         loadFeedback();
-
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     private void loadFeedback() {

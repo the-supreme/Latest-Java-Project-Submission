@@ -22,7 +22,7 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
    public StudentConsultationRecordsFrame(Counselor counselor) {
         this.currentCounselor = counselor;
         initComponents();
-        
+        this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         FileHandler fileHandler = new FileHandler();
         
         
