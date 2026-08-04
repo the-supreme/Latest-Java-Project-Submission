@@ -4,7 +4,7 @@ import counselormgmtsystem.GUIprogram.AdminFrames.AdminFrame;
 import counselormgmtsystem.GUIprogram.CounselorFrames.CounselorMainFrame;
 import counselormgmtsystem.GUIprogram.ReceptionistFrames.ReceptionistMainFrame;
 import counselormgmtsystem.GUIprogram.StudentFrames.StudentMainFrame;
-//import counselormgmtsystem.Admin;
+import counselormgmtsystem.Admin;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -21,10 +21,14 @@ public class LoginFrame extends javax.swing.JFrame {
      */
     public LoginFrame() {
         initComponents();
+        
+        passwordTF.setText(""); 
+        
         ImageIcon originalIcon = new ImageIcon(getClass().getResource("/images/login_icon.png"));
         Image rawImage = originalIcon.getImage();
         Image resizedImage = rawImage.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         loginIcon.setIcon(new ImageIcon(resizedImage));
+
     }
 
     /**
@@ -82,12 +86,10 @@ public class LoginFrame extends javax.swing.JFrame {
 
         usernameTF.setForeground(new java.awt.Color(102, 102, 102));
         usernameTF.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        usernameTF.setText("Enter your username here");
         usernameTF.addActionListener(this::usernameTFActionPerformed);
 
         passwordTF.setForeground(new java.awt.Color(102, 102, 102));
         passwordTF.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        passwordTF.setText("jPasswordField1");
 
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -227,11 +229,6 @@ public class LoginFrame extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -242,9 +239,6 @@ public class LoginFrame extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
         
         // read the files and initialize
         FileHandler fh = new FileHandler();

@@ -8,6 +8,7 @@ import counselormgmtsystem.*;
 import java.awt.Color;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,17 +24,28 @@ public class StudentMainFrame extends javax.swing.JFrame {
     public StudentMainFrame(Student student) {
         this.currentStudent = student;
         initComponents();
-        ImageIcon originalUserIcon = new ImageIcon(getClass().getResource("/images/user (1).png"));
-        usernameText.setText(currentStudent.getUsername());
-        Image rawUserImage = originalUserIcon.getImage();
-        Image resizedUserImage = rawUserImage.getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-        userIcon.setIcon(new ImageIcon(resizedUserImage));
-        logoutButton.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/log-out.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
-        logoutButton.addActionListener(e -> {
-            LoginFrame loginFrame = new LoginFrame();
-            loginFrame.setVisible(true);
-            this.dispose();
-        });
+        
+        if (FileHandler.userList.isEmpty()) {
+            new FileHandler().loadDataFromFiles();
+        }
+
+        try {
+            ImageIcon originalUserIcon = new ImageIcon(getClass().getResource("/images/user (1).png"));
+            studentPageUserIcon.setIcon(new ImageIcon(originalUserIcon.getImage().getScaledInstance(140, 140, Image.SCALE_SMOOTH)));
+            userIcon.setIcon(new ImageIcon(originalUserIcon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH)));
+            editBtn1.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+            saveBtn1.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/diskette.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));
+            logoutButton.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/log-out.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+        } catch (Exception e) {
+            logger.log(java.util.logging.Level.WARNING, "Image resource loading failed: " + e.getMessage());
+        }
+
+        // Populate fields with Admin details
+        loadStudentData();
+
+        // Lock fields initially
+        setEditMode(false);
+
     }
 
     /**
@@ -47,36 +59,302 @@ public class StudentMainFrame extends javax.swing.JFrame {
 
         filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0));
         contentPanel = new javax.swing.JPanel();
+        counselorPageUserIcon = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        UNTF = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        STF = new javax.swing.JTextField();
+        EmailTF = new javax.swing.JTextField();
+        CNTF = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        FNTF = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        editBtn1 = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        saveBtn1 = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        STF1 = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        counselorPageUserIcon1 = new javax.swing.JLabel();
+        CNTF1 = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        editBtn2 = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        saveBtn2 = new javax.swing.JButton();
+        FNTF1 = new javax.swing.JTextField();
+        jLabel14 = new javax.swing.JLabel();
+        UNTF1 = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        EmailTF1 = new javax.swing.JTextField();
         sidebarPanel = new javax.swing.JPanel();
         profileHeader = new javax.swing.JPanel();
         userIcon = new javax.swing.JLabel();
         usernameText = new javax.swing.JLabel();
         logoutButton = new javax.swing.JButton();
         navItem01 = new javax.swing.JPanel();
-        navItemText01 = new javax.swing.JLabel();
-        navItem02 = new javax.swing.JPanel();
         navItemText02 = new javax.swing.JLabel();
-        navItem03 = new javax.swing.JPanel();
-        navItemText03 = new javax.swing.JLabel();
-        navItem04 = new javax.swing.JPanel();
+        navItem02 = new javax.swing.JPanel();
         navItemText04 = new javax.swing.JLabel();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jPanel1 = new javax.swing.JPanel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        studentPageUserIcon = new javax.swing.JLabel();
+        CNTF2 = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        editBtn3 = new javax.swing.JButton();
+        jLabel21 = new javax.swing.JLabel();
+        saveBtn = new javax.swing.JButton();
+        FNTF2 = new javax.swing.JTextField();
+        jLabel22 = new javax.swing.JLabel();
+        UNTF2 = new javax.swing.JTextField();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        EmailTF2 = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        ICTF = new javax.swing.JTextField();
+        jLabel26 = new javax.swing.JLabel();
+        ECTF = new javax.swing.JTextField();
 
         contentPanel.setBackground(new java.awt.Color(255, 255, 255));
+
+        counselorPageUserIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/user (1).png"))); // NOI18N
+        counselorPageUserIcon.setText("jLabel1");
+
+        jLabel6.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Contact Number:");
+
+        jLabel1.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Personal Information");
+
+        jLabel7.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("Email:");
+
+        UNTF.setBackground(new java.awt.Color(255, 255, 255));
+        UNTF.setForeground(new java.awt.Color(0, 0, 0));
+        UNTF.setText("john_doe");
+        UNTF.addActionListener(this::UNTFActionPerformed);
+
+        jLabel2.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Full Name: ");
+
+        STF.setBackground(new java.awt.Color(255, 255, 255));
+        STF.setForeground(new java.awt.Color(0, 0, 0));
+        STF.setText("Stress Care");
+        STF.addActionListener(this::STFActionPerformed);
+
+        EmailTF.setBackground(new java.awt.Color(255, 255, 255));
+        EmailTF.setForeground(new java.awt.Color(0, 0, 0));
+        EmailTF.setText("john_doe@gmail.com");
+        EmailTF.addActionListener(this::EmailTFActionPerformed);
+
+        CNTF.setBackground(new java.awt.Color(255, 255, 255));
+        CNTF.setForeground(new java.awt.Color(0, 0, 0));
+        CNTF.setText("0132312312");
+        CNTF.addActionListener(this::CNTFActionPerformed);
+
+        jLabel3.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Username:");
+
+        FNTF.setBackground(new java.awt.Color(255, 255, 255));
+        FNTF.setForeground(new java.awt.Color(0, 0, 0));
+        FNTF.setText("John Doe");
+        FNTF.addActionListener(this::FNTFActionPerformed);
+
+        jLabel4.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Save");
+
+        editBtn1.setBackground(new java.awt.Color(0, 0, 0));
+        editBtn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit.png"))); // NOI18N
+        editBtn1.setBorder(null);
+        editBtn1.setBorderPainted(false);
+        editBtn1.setContentAreaFilled(false);
+        editBtn1.addActionListener(this::editBtn1ActionPerformed);
+
+        jLabel5.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setText("Specialization:");
+
+        jLabel8.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("Edit");
+
+        saveBtn1.setBackground(new java.awt.Color(0, 0, 0));
+        saveBtn1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/diskette.png"))); // NOI18N
+        saveBtn1.setBorder(null);
+        saveBtn1.setBorderPainted(false);
+        saveBtn1.setContentAreaFilled(false);
+        saveBtn1.setFocusPainted(false);
+        saveBtn1.addActionListener(this::saveBtn1ActionPerformed);
 
         javax.swing.GroupLayout contentPanelLayout = new javax.swing.GroupLayout(contentPanel);
         contentPanel.setLayout(contentPanelLayout);
         contentPanelLayout.setHorizontalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 701, Short.MAX_VALUE)
+            .addGroup(contentPanelLayout.createSequentialGroup()
+                .addGap(95, 95, 95)
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(contentPanelLayout.createSequentialGroup()
+                        .addGap(170, 170, 170)
+                        .addComponent(jLabel1))
+                    .addGroup(contentPanelLayout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(counselorPageUserIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(130, 130, 130)
+                        .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(EmailTF, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(STF, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(contentPanelLayout.createSequentialGroup()
+                        .addComponent(FNTF, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(80, 80, 80)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(contentPanelLayout.createSequentialGroup()
+                        .addGap(310, 310, 310)
+                        .addComponent(CNTF, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(contentPanelLayout.createSequentialGroup()
+                        .addComponent(UNTF, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(110, 110, 110)
+                        .addComponent(editBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(saveBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(contentPanelLayout.createSequentialGroup()
+                        .addGap(340, 340, 340)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(106, Short.MAX_VALUE))
         );
         contentPanelLayout.setVerticalGroup(
             contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 529, Short.MAX_VALUE)
+            .addGroup(contentPanelLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jLabel1)
+                .addGap(32, 32, 32)
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(counselorPageUserIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(contentPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(EmailTF, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(50, 50, 50)
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(STF, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(20, 20, 20)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(FNTF, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(CNTF, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(UNTF, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(editBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(saveBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(contentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
+        jLabel9.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("Save");
+
+        STF1.setBackground(new java.awt.Color(255, 255, 255));
+        STF1.setForeground(new java.awt.Color(0, 0, 0));
+        STF1.setText("Stress Care");
+        STF1.addActionListener(this::STF1ActionPerformed);
+
+        jLabel10.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel10.setText("Specialization:");
+
+        jLabel11.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel11.setText("Contact Number:");
+
+        counselorPageUserIcon1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/user (1).png"))); // NOI18N
+        counselorPageUserIcon1.setText("jLabel1");
+
+        CNTF1.setBackground(new java.awt.Color(255, 255, 255));
+        CNTF1.setForeground(new java.awt.Color(0, 0, 0));
+        CNTF1.setText("0132312312");
+        CNTF1.addActionListener(this::CNTF1ActionPerformed);
+
+        jLabel12.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setText("Personal Information");
+
+        editBtn2.setBackground(new java.awt.Color(0, 0, 0));
+        editBtn2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit.png"))); // NOI18N
+        editBtn2.setBorder(null);
+        editBtn2.setBorderPainted(false);
+        editBtn2.setContentAreaFilled(false);
+        editBtn2.addActionListener(this::editBtn2ActionPerformed);
+
+        jLabel13.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel13.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel13.setText("Full Name: ");
+
+        saveBtn2.setBackground(new java.awt.Color(0, 0, 0));
+        saveBtn2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/diskette.png"))); // NOI18N
+        saveBtn2.setBorder(null);
+        saveBtn2.setBorderPainted(false);
+        saveBtn2.setContentAreaFilled(false);
+        saveBtn2.setFocusPainted(false);
+        saveBtn2.addActionListener(this::saveBtn2ActionPerformed);
+
+        FNTF1.setBackground(new java.awt.Color(255, 255, 255));
+        FNTF1.setForeground(new java.awt.Color(0, 0, 0));
+        FNTF1.setText("John Doe");
+        FNTF1.addActionListener(this::FNTF1ActionPerformed);
+
+        jLabel14.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel14.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel14.setText("Email:");
+
+        UNTF1.setBackground(new java.awt.Color(255, 255, 255));
+        UNTF1.setForeground(new java.awt.Color(0, 0, 0));
+        UNTF1.setText("john_doe");
+        UNTF1.addActionListener(this::UNTF1ActionPerformed);
+
+        jLabel15.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel15.setText("Edit");
+
+        jLabel16.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel16.setText("Username:");
+
+        EmailTF1.setBackground(new java.awt.Color(255, 255, 255));
+        EmailTF1.setForeground(new java.awt.Color(0, 0, 0));
+        EmailTF1.setText("john_doe@gmail.com");
+        EmailTF1.addActionListener(this::EmailTF1ActionPerformed);
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
         sidebarPanel.setBackground(new java.awt.Color(0, 0, 102));
+        sidebarPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         profileHeader.setBackground(new java.awt.Color(0, 0, 102));
 
@@ -121,8 +399,13 @@ public class StudentMainFrame extends javax.swing.JFrame {
                 .addContainerGap(132, Short.MAX_VALUE))
         );
 
+        sidebarPanel.add(profileHeader, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
         navItem01.setBackground(new java.awt.Color(0, 0, 102));
         navItem01.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                navItem01MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 navItem01MouseEntered(evt);
             }
@@ -131,29 +414,34 @@ public class StudentMainFrame extends javax.swing.JFrame {
             }
         });
 
-        navItemText01.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
-        navItemText01.setForeground(new java.awt.Color(255, 255, 255));
-        navItemText01.setText("View Queue Number");
+        navItemText02.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        navItemText02.setForeground(new java.awt.Color(255, 255, 255));
+        navItemText02.setText("<html>Manage Counseling Appointments</html>");
 
         javax.swing.GroupLayout navItem01Layout = new javax.swing.GroupLayout(navItem01);
         navItem01.setLayout(navItem01Layout);
         navItem01Layout.setHorizontalGroup(
             navItem01Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(navItem01Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(navItemText01)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(23, 23, 23)
+                .addComponent(navItemText02, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         navItem01Layout.setVerticalGroup(
             navItem01Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, navItem01Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
-                .addComponent(navItemText01)
-                .addGap(20, 20, 20))
+                .addContainerGap(13, Short.MAX_VALUE)
+                .addComponent(navItemText02, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(19, 19, 19))
         );
+
+        sidebarPanel.add(navItem01, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 230, -1, 80));
 
         navItem02.setBackground(new java.awt.Color(0, 0, 102));
         navItem02.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                navItem02MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 navItem02MouseEntered(evt);
             }
@@ -162,113 +450,135 @@ public class StudentMainFrame extends javax.swing.JFrame {
             }
         });
 
-        navItemText02.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
-        navItemText02.setForeground(new java.awt.Color(255, 255, 255));
-        navItemText02.setText("<html>Manage Counseling Appointments</html>");
+        navItemText04.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        navItemText04.setForeground(new java.awt.Color(255, 255, 255));
+        navItemText04.setText("View counselor profiles");
 
         javax.swing.GroupLayout navItem02Layout = new javax.swing.GroupLayout(navItem02);
         navItem02.setLayout(navItem02Layout);
         navItem02Layout.setHorizontalGroup(
             navItem02Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(navItem02Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(navItemText02, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addGap(21, 21, 21)
+                .addComponent(navItemText04)
+                .addContainerGap(86, Short.MAX_VALUE))
         );
         navItem02Layout.setVerticalGroup(
             navItem02Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, navItem02Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(navItemText02, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        navItem03.setBackground(new java.awt.Color(0, 0, 102));
-        navItem03.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                navItem03MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                navItem03MouseExited(evt);
-            }
-        });
-
-        navItemText03.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
-        navItemText03.setForeground(new java.awt.Color(255, 255, 255));
-        navItemText03.setText("View appointment history");
-
-        javax.swing.GroupLayout navItem03Layout = new javax.swing.GroupLayout(navItem03);
-        navItem03.setLayout(navItem03Layout);
-        navItem03Layout.setHorizontalGroup(
-            navItem03Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(navItem03Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(navItemText03)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        navItem03Layout.setVerticalGroup(
-            navItem03Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, navItem03Layout.createSequentialGroup()
-                .addContainerGap(24, Short.MAX_VALUE)
-                .addComponent(navItemText03)
-                .addGap(18, 18, 18))
-        );
-
-        navItem04.setBackground(new java.awt.Color(0, 0, 102));
-        navItem04.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                navItem04MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                navItem04MouseExited(evt);
-            }
-        });
-
-        navItemText04.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
-        navItemText04.setForeground(new java.awt.Color(255, 255, 255));
-        navItemText04.setText("View counselor profiles");
-
-        javax.swing.GroupLayout navItem04Layout = new javax.swing.GroupLayout(navItem04);
-        navItem04.setLayout(navItem04Layout);
-        navItem04Layout.setHorizontalGroup(
-            navItem04Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(navItem04Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
+                .addContainerGap(22, Short.MAX_VALUE)
                 .addComponent(navItemText04)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        navItem04Layout.setVerticalGroup(
-            navItem04Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(navItem04Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(navItemText04)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addGap(20, 20, 20))
         );
 
-        javax.swing.GroupLayout sidebarPanelLayout = new javax.swing.GroupLayout(sidebarPanel);
-        sidebarPanel.setLayout(sidebarPanelLayout);
-        sidebarPanelLayout.setHorizontalGroup(
-            sidebarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(navItem01, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(navItem02, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(navItem03, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(navItem04, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(profileHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        sidebarPanelLayout.setVerticalGroup(
-            sidebarPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(sidebarPanelLayout.createSequentialGroup()
-                .addComponent(profileHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addComponent(navItem01, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(navItem02, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(navItem03, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(navItem04, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        sidebarPanel.add(navItem02, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 360, 273, -1));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel17.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel17.setText("Save");
+        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 470, 40, 30));
+
+        jLabel19.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel19.setText("Contact Number:");
+        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 260, 140, 30));
+
+        studentPageUserIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/user (1).png"))); // NOI18N
+        studentPageUserIcon.setText("jLabel1");
+        jPanel1.add(studentPageUserIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 80, 150, 160));
+
+        CNTF2.setBackground(new java.awt.Color(255, 255, 255));
+        CNTF2.setForeground(new java.awt.Color(0, 0, 0));
+        CNTF2.setText("0132312312");
+        CNTF2.addActionListener(this::CNTF2ActionPerformed);
+        jPanel1.add(CNTF2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 290, 230, 30));
+
+        jLabel20.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        jLabel20.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel20.setText("Personal Information");
+        jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 25, -1, -1));
+
+        editBtn3.setBackground(new java.awt.Color(0, 0, 0));
+        editBtn3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/edit.png"))); // NOI18N
+        editBtn3.setBorder(null);
+        editBtn3.setBorderPainted(false);
+        editBtn3.setContentAreaFilled(false);
+        editBtn3.addActionListener(this::editBtn3ActionPerformed);
+        jPanel1.add(editBtn3, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 430, 40, 40));
+
+        jLabel21.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel21.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel21.setText("Full Name: ");
+        jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 310, 80, 30));
+
+        saveBtn.setBackground(new java.awt.Color(0, 0, 0));
+        saveBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/diskette.png"))); // NOI18N
+        saveBtn.setBorder(null);
+        saveBtn.setBorderPainted(false);
+        saveBtn.setContentAreaFilled(false);
+        saveBtn.setFocusPainted(false);
+        saveBtn.addActionListener(this::saveBtnActionPerformed);
+        jPanel1.add(saveBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 430, 40, 40));
+
+        FNTF2.setBackground(new java.awt.Color(255, 255, 255));
+        FNTF2.setForeground(new java.awt.Color(0, 0, 0));
+        FNTF2.setText("John Doe");
+        FNTF2.addActionListener(this::FNTF2ActionPerformed);
+        jPanel1.add(FNTF2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 340, 230, 30));
+
+        jLabel22.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel22.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel22.setText("Email:");
+        jPanel1.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 170, 120, 30));
+
+        UNTF2.setBackground(new java.awt.Color(255, 255, 255));
+        UNTF2.setForeground(new java.awt.Color(0, 0, 0));
+        UNTF2.setText("john_doe");
+        UNTF2.addActionListener(this::UNTF2ActionPerformed);
+        jPanel1.add(UNTF2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 430, 230, 30));
+
+        jLabel23.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel23.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel23.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel23.setText("Edit");
+        jPanel1.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 470, 40, 30));
+
+        jLabel24.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel24.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel24.setText("Username:");
+        jPanel1.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 400, 80, 30));
+
+        EmailTF2.setBackground(new java.awt.Color(255, 255, 255));
+        EmailTF2.setForeground(new java.awt.Color(0, 0, 0));
+        EmailTF2.setText("john_doe@gmail.com");
+        EmailTF2.addActionListener(this::EmailTF2ActionPerformed);
+        jPanel1.add(EmailTF2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 200, 230, 30));
+
+        jLabel25.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel25.setText("Intake Code:");
+        jPanel1.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 80, 80, 30));
+
+        ICTF.setBackground(new java.awt.Color(255, 255, 255));
+        ICTF.setForeground(new java.awt.Color(0, 0, 0));
+        ICTF.setText("UCDF2506");
+        ICTF.addActionListener(this::ICTFActionPerformed);
+        jPanel1.add(ICTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 110, 230, 30));
+
+        jLabel26.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        jLabel26.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel26.setText("Emergency Contact:");
+        jPanel1.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 350, 180, 30));
+
+        ECTF.setBackground(new java.awt.Color(255, 255, 255));
+        ECTF.setForeground(new java.awt.Color(0, 0, 0));
+        ECTF.setText("0132312312");
+        ECTF.addActionListener(this::ECTFActionPerformed);
+        jPanel1.add(ECTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 380, 230, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -277,69 +587,219 @@ public class StudentMainFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(sidebarPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(contentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 671, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(sidebarPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(contentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void loadStudentData() {
+        if (currentStudent != null) {
+            usernameText.setText(currentStudent.getUsername());
+            FNTF.setText(currentStudent.getfullName());
+            UNTF.setText(currentStudent.getUsername());
+            EmailTF.setText(currentStudent.getEmail());
+            CNTF.setText(currentStudent.getContactNumber());
+            ICTF.setText(currentStudent.getIntakeCode());
+            ECTF.setText(currentStudent.getEmergencyContact());
+        }
+    }
+
+    private void setEditMode(boolean enable) {
+        FNTF.setEditable(enable);
+        UNTF.setEditable(enable);
+        EmailTF.setEditable(enable);
+        CNTF.setEditable(enable);
+        ECTF.setEditable(enable);
+
+        saveBtn1.setEnabled(enable);
+        editBtn1.setEnabled(!enable);
+    }
+
+    
     private void navItem01MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem01MouseEntered
         // TODO add your handling code here:
         navItem01.setBackground(Color.orange);
-        navItemText01.setForeground(Color.BLACK);
-        
+        navItemText02.setForeground(Color.BLACK);
     }//GEN-LAST:event_navItem01MouseEntered
 
     private void navItem01MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem01MouseExited
         // TODO add your handling code here:
         navItem01.setBackground(new Color(0,0,102));
-        navItemText01.setForeground(Color.WHITE);
+        navItemText02.setForeground(Color.WHITE);
     }//GEN-LAST:event_navItem01MouseExited
 
     private void navItem02MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem02MouseEntered
         // TODO add your handling code here:
         navItem02.setBackground(Color.orange);
-        navItemText02.setForeground(Color.BLACK);
+        navItemText04.setForeground(Color.BLACK);
     }//GEN-LAST:event_navItem02MouseEntered
 
     private void navItem02MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem02MouseExited
         // TODO add your handling code here:
         navItem02.setBackground(new Color(0,0,102));
-        navItemText02.setForeground(Color.WHITE);
+        navItemText04.setForeground(Color.WHITE);
     }//GEN-LAST:event_navItem02MouseExited
 
-    private void navItem03MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem03MouseEntered
-        // TODO add your handling code here:
-        navItem03.setBackground(Color.orange);
-        navItemText03.setForeground(Color.BLACK);
-    }//GEN-LAST:event_navItem03MouseEntered
-
-    private void navItem03MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem03MouseExited
-        // TODO add your handling code here:
-        navItem03.setBackground(new Color(0,0,102));
-        navItemText03.setForeground(Color.WHITE);
-    }//GEN-LAST:event_navItem03MouseExited
-
-    private void navItem04MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem04MouseEntered
-        // TODO add your handling code here:
-        navItem04.setBackground(Color.orange);
-        navItemText04.setForeground(Color.BLACK);
-    }//GEN-LAST:event_navItem04MouseEntered
-
-    private void navItem04MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem04MouseExited
-        // TODO add your handling code here:
-        navItem04.setBackground(new Color(0,0,102));
-        navItemText04.setForeground(Color.WHITE);
-    }//GEN-LAST:event_navItem04MouseExited
-
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
-        // TODO add your handling code here:
+        LoginFrame loginFrame = new LoginFrame();
+        loginFrame.setLocationRelativeTo(null);
+        loginFrame.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_logoutButtonActionPerformed
+
+    private void CNTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CNTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CNTFActionPerformed
+
+    private void editBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtn1ActionPerformed
+        setEditMode(true);
+        FNTF.requestFocus(); // Place cursor in the first box
+    }//GEN-LAST:event_editBtn1ActionPerformed
+
+    private void saveBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtn1ActionPerformed
+        String newFullName = FNTF.getText().trim();
+        String newUsername = UNTF.getText().trim();
+        String newEmail = EmailTF.getText().trim();
+        String newContact = CNTF.getText().trim();
+        String newEmergencyContact = ECTF.getText().trim();
+        
+
+        String validationError = FileHandler.validateData(newFullName, newContact, newEmail, null, false, currentStudent.getID());
+        if (validationError != null) {
+            JOptionPane.showMessageDialog(this, validationError, "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        currentStudent.setFullName(newFullName);
+        currentStudent.setUsername(newUsername);
+        currentStudent.setEmail(newEmail);
+        currentStudent.setContactNumber(newContact);
+        currentStudent.setEmergencyContact(newEmergencyContact);
+
+        // Update in central list and file
+        usernameText.setText(currentStudent.getUsername());
+        setEditMode(false);
+
+        JOptionPane.showMessageDialog(this, "Profile updated in session!");
+    }//GEN-LAST:event_saveBtn1ActionPerformed
+
+    private void FNTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FNTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_FNTFActionPerformed
+
+    private void UNTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UNTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_UNTFActionPerformed
+
+    private void EmailTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EmailTFActionPerformed
+
+    private void STFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_STFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_STFActionPerformed
+
+    private void STF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_STF1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_STF1ActionPerformed
+
+    private void CNTF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CNTF1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CNTF1ActionPerformed
+
+    private void editBtn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtn2ActionPerformed
+        setEditMode(true);
+        FNTF.requestFocus(); // Place cursor in the first box
+    }//GEN-LAST:event_editBtn2ActionPerformed
+
+    private void saveBtn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtn2ActionPerformed
+    }//GEN-LAST:event_saveBtn2ActionPerformed
+
+    private void FNTF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FNTF1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_FNTF1ActionPerformed
+
+    private void UNTF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UNTF1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_UNTF1ActionPerformed
+
+    private void EmailTF1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailTF1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EmailTF1ActionPerformed
+
+    private void CNTF2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CNTF2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CNTF2ActionPerformed
+
+    private void editBtn3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtn3ActionPerformed
+        setEditMode(true);
+        FNTF.requestFocus(); // Place cursor in the first box
+    }//GEN-LAST:event_editBtn3ActionPerformed
+
+    private void saveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveBtnActionPerformed
+        String newFullName = FNTF.getText().trim();
+        String newUsername = UNTF.getText().trim();
+        String newEmail = EmailTF.getText().trim();
+        String newContact = CNTF.getText().trim();
+        String newEmergencyContact = ECTF.getText().trim();
+        
+
+        String validationError = FileHandler.validateData(newFullName, newContact, newEmail, null, false, currentStudent.getID());
+        if (validationError != null) {
+            JOptionPane.showMessageDialog(this, validationError, "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        currentStudent.setFullName(newFullName);
+        currentStudent.setUsername(newUsername);
+        currentStudent.setEmail(newEmail);
+        currentStudent.setContactNumber(newContact);
+        currentStudent.setEmergencyContact(newEmergencyContact);
+
+        // Update in central list and file
+        usernameText.setText(currentStudent.getUsername());
+        setEditMode(false);
+
+        JOptionPane.showMessageDialog(this, "Profile updated in session!");
+    }//GEN-LAST:event_saveBtnActionPerformed
+
+    private void FNTF2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FNTF2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_FNTF2ActionPerformed
+
+    private void UNTF2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UNTF2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_UNTF2ActionPerformed
+
+    private void EmailTF2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EmailTF2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EmailTF2ActionPerformed
+
+    private void ICTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ICTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ICTFActionPerformed
+
+    private void ECTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ECTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ECTFActionPerformed
+
+    private void navItem01MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem01MouseClicked
+        StudentDashboardGUI dbframe = new StudentDashboardGUI(this.currentStudent);
+        dbframe.setLocationRelativeTo(null);
+        dbframe.setVisible(true);
+    }//GEN-LAST:event_navItem01MouseClicked
+
+    private void navItem02MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem02MouseClicked
+        CounselorProfileGUI counselorFrame = new CounselorProfileGUI(this.currentStudent);
+        counselorFrame.setLocationRelativeTo(null);
+        counselorFrame.setVisible(true);
+    }//GEN-LAST:event_navItem02MouseClicked
 
     
     
@@ -369,19 +829,66 @@ public class StudentMainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField CNTF;
+    private javax.swing.JTextField CNTF1;
+    private javax.swing.JTextField CNTF2;
+    private javax.swing.JTextField ECTF;
+    private javax.swing.JTextField EmailTF;
+    private javax.swing.JTextField EmailTF1;
+    private javax.swing.JTextField EmailTF2;
+    private javax.swing.JTextField FNTF;
+    private javax.swing.JTextField FNTF1;
+    private javax.swing.JTextField FNTF2;
+    private javax.swing.JTextField ICTF;
+    private javax.swing.JTextField STF;
+    private javax.swing.JTextField STF1;
+    private javax.swing.JTextField UNTF;
+    private javax.swing.JTextField UNTF1;
+    private javax.swing.JTextField UNTF2;
     private javax.swing.JPanel contentPanel;
+    private javax.swing.JLabel counselorPageUserIcon;
+    private javax.swing.JLabel counselorPageUserIcon1;
+    private javax.swing.JButton editBtn1;
+    private javax.swing.JButton editBtn2;
+    private javax.swing.JButton editBtn3;
     private javax.swing.Box.Filler filler2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JButton logoutButton;
     private javax.swing.JPanel navItem01;
     private javax.swing.JPanel navItem02;
-    private javax.swing.JPanel navItem03;
-    private javax.swing.JPanel navItem04;
-    private javax.swing.JLabel navItemText01;
     private javax.swing.JLabel navItemText02;
-    private javax.swing.JLabel navItemText03;
     private javax.swing.JLabel navItemText04;
     private javax.swing.JPanel profileHeader;
+    private javax.swing.JButton saveBtn;
+    private javax.swing.JButton saveBtn1;
+    private javax.swing.JButton saveBtn2;
     private javax.swing.JPanel sidebarPanel;
+    private javax.swing.JLabel studentPageUserIcon;
     private javax.swing.JLabel userIcon;
     private javax.swing.JLabel usernameText;
     // End of variables declaration//GEN-END:variables

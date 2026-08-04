@@ -1,0 +1,3 @@
+STD001|CNS001|The counselor was helpful and patient.
+STD004|CNS002|The session helped me manage presentation anxiety.
+STD001|CNS001|hes a good guy i love him

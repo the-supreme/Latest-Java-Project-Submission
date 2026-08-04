@@ -1,3 +1,2 @@
 CNS001|Academic Stress & Anxiety|012-3456789|anand.raj@apu.edu.my
-CNS002|Academic Stress & Anxiety|012-3456789|anand.raj@apu.edu.my
-CNS003|Academic Stress & Anxiety|012-3456789|anand.raj@apu.edu.my
+CNS002|Academic Stress & Anxiety|012-3456769|kumar@apu.edu.my

@@ -13,12 +13,14 @@ public class FileHandler {
     public static ArrayList<Appointment> apptList = new ArrayList<>();
     public static ArrayList<Roster> rosterList = new ArrayList<>();
     public static ArrayList<ConsultationRecords> consultList = new ArrayList<>();
+    public static ArrayList<Feedback> feedbackList = new ArrayList<>();
 
     public void loadDataFromFiles() {
         userList.clear();
         apptList.clear();
         rosterList.clear();
         consultList.clear();
+        feedbackList.clear();
 
         // Read Users File
         try (BufferedReader uReader = new BufferedReader(new FileReader("dataFiles/users.txt"))) {
@@ -28,7 +30,12 @@ public class FileHandler {
                 if (line.isEmpty()) continue; // Skip blank lines
 
                 String[] userData = line.split("\\|");
-                if (userData.length < 4) continue;
+                
+                // Require at least 4 columns (ID, username, password, fullName)
+                if (userData.length < 4) continue; 
+
+                // Extract status from userData[4], or default to "Active" if missing
+                String status = (userData.length >= 5) ? userData[4].trim() : "Active";
 
                 // Read Admin File and Add to UserList
                 if (userData[0].startsWith("ADM")) {
@@ -36,8 +43,9 @@ public class FileHandler {
                         String adminLine;
                         while ((adminLine = adminReader.readLine()) != null) {
                             String[] adminData = adminLine.trim().split("\\|");
+                            // Admin has 4 columns: ID | Contact | Email | Room
                             if (adminData.length >= 4 && adminData[0].equals(userData[0])) {
-                                Admin admin = new Admin(userData[0], userData[1], userData[2], userData[3], adminData[1], adminData[2], adminData[3]);
+                                Admin admin = new Admin(userData[0], userData[1], userData[2], userData[3], status, adminData[1], adminData[2], adminData[3]);
                                 userList.add(admin);
                                 break;
                             }
@@ -53,8 +61,9 @@ public class FileHandler {
                         String studentLine;
                         while ((studentLine = studentReader.readLine()) != null) {
                             String[] studentData = studentLine.trim().split("\\|");
+                            // Student has 5 columns: ID | Intake | Contact | Email | Emergency
                             if (studentData.length >= 5 && studentData[0].equals(userData[0])) {
-                                Student student = new Student(userData[0], userData[1], userData[2], userData[3], studentData[1], studentData[2], studentData[3], studentData[4]);
+                                Student student = new Student(userData[0], userData[1], userData[2], userData[3], status, studentData[1], studentData[2], studentData[3], studentData[4]);
                                 userList.add(student);
                                 break;
                             }
@@ -70,9 +79,10 @@ public class FileHandler {
                         String recepLine;
                         while ((recepLine = recepReader.readLine()) != null) {
                             String[] recepData = recepLine.trim().split("\\|");
-                            // FIXED: recepData[0].equals(userData[0]) instead of recepData[0]
+                            
+                            // Require at least 3 columns for Receptionist (ID | Contact | Email)
                             if (recepData.length >= 3 && recepData[0].equals(userData[0])) {
-                                Receptionist receptionist = new Receptionist(userData[0], userData[1], userData[2], userData[3], recepData[1], recepData[2]);
+                                Receptionist receptionist = new Receptionist(userData[0], userData[1], userData[2], userData[3], status, recepData[1], recepData[2]);
                                 userList.add(receptionist);
                                 break;
                             }
@@ -88,9 +98,10 @@ public class FileHandler {
                         String counsLine;
                         while ((counsLine = counsReader.readLine()) != null) {
                             String[] counsData = counsLine.trim().split("\\|");
-                            // FIXED: counsData[0].equals(userData[0]) instead of counsData[0]
+                            
+                            // Require at least 4 columns for Counselor (ID | Specialization | Contact | Email)
                             if (counsData.length >= 4 && counsData[0].equals(userData[0])) {
-                                Counselor counselor = new Counselor(userData[0], userData[1], userData[2], userData[3], counsData[1], counsData[2], counsData[3]);
+                                Counselor counselor = new Counselor(userData[0], userData[1], userData[2], userData[3], status, counsData[1], counsData[2], counsData[3]);
                                 userList.add(counselor);
                                 break;
                             }
@@ -112,9 +123,19 @@ public class FileHandler {
                 if (apptline.isEmpty()) continue;
 
                 String[] appointmentData = apptline.split("\\|");
-                // GUARD: Check length before accessing index 7
-                if (appointmentData.length >= 8) {
-                    Appointment appt = new Appointment(appointmentData[0], appointmentData[1], appointmentData[2], appointmentData[3], appointmentData[4], appointmentData[5], appointmentData[6], appointmentData[7]);
+                // GUARD: Check length for 9 parameters
+                if (appointmentData.length >= 9) {
+                    Appointment appt = new Appointment(
+                        appointmentData[0], 
+                        appointmentData[1], 
+                        appointmentData[2], 
+                        appointmentData[3], 
+                        appointmentData[4], 
+                        appointmentData[5], 
+                        appointmentData[6],
+                        appointmentData[7],
+                        appointmentData[8]
+                    );
                     apptList.add(appt);
                 } else {
                     System.out.println("Skipping invalid appointment row: " + apptline);
@@ -133,7 +154,10 @@ public class FileHandler {
 
                 String[] rosterData = rosterLine.split("\\|");
                 if (rosterData.length >= 6) {
-                    Roster roster = new Roster(rosterData[0], rosterData[1], rosterData[2], rosterData[3], rosterData[4], rosterData[5]);
+                    Roster roster = new Roster(rosterData[0], rosterData[1], rosterData[2], rosterData[3], rosterData[4]);
+                    rosterList.add(roster);
+                } else if (rosterData.length >= 5) {
+                    Roster roster = new Roster(rosterData[0], rosterData[1], rosterData[2], rosterData[3], rosterData[4]);
                     rosterList.add(roster);
                 }
             }
@@ -157,6 +181,23 @@ public class FileHandler {
         } catch (IOException e) {
             System.out.println("Cant open the ConsultationRecords File");
         }
+
+        // Read Feedback File safely
+        try (BufferedReader feedbackReader = new BufferedReader(new FileReader("dataFiles/feedback.txt"))) {
+            String feedbackLine;
+            while ((feedbackLine = feedbackReader.readLine()) != null) {
+                feedbackLine = feedbackLine.trim();
+                if (feedbackLine.isEmpty()) continue;
+
+                String[] feedbackData = feedbackLine.split("\\|");
+                if (feedbackData.length >= 3) {
+                    Feedback feedback = new Feedback(feedbackData[0], feedbackData[1], feedbackData[2]);
+                    feedbackList.add(feedback);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Cant open the Feedback File");
+        }
     }
 
     public static void saveDataToFiles() {
@@ -167,7 +208,8 @@ public class FileHandler {
         ArrayList<String> userDataList = new ArrayList<>();
 
         for (User user : userList) {
-            String userText = user.ID + "|" + user.username + "|" + user.password + "|" + user.fullName;
+            // FIX: Append user.status here so it is not lost
+            String userText = user.ID + "|" + user.username + "|" + user.password + "|" + user.fullName + "|" + user.status;
             userDataList.add(userText);
 
             if (user instanceof Admin admin) {
@@ -234,7 +276,7 @@ public class FileHandler {
         // write into rosters
         ArrayList<String> listOfRosterText = new ArrayList<>(); 
         for (Roster roster : rosterList) {
-            String rosterText = roster.rosterID + "|" + roster.counselorID + "|" + roster.date + "|" + roster.startTime + "|" + roster.endTime + "|" + roster.status;
+            String rosterText = roster.getRosterID() + "|" + roster.getCounselorID() + "|" + roster.getDate() + "|" + roster.getStartTime() + "|" + roster.getEndTime();
             listOfRosterText.add(rosterText);
         }
 
@@ -250,7 +292,15 @@ public class FileHandler {
         // write into appointments
         ArrayList<String> listOfApptText = new ArrayList<>(); 
         for (Appointment appt : apptList) {
-            String apptText = appt.appointmentID + "|" + appt.studentID + "|" + appt.counselorID + "|" + appt.date + "|" + appt.time + "|" + appt.queueNumber + "|" + appt.bookingType + "|" + appt.status;
+            String apptText = appt.getApptID() + "|" 
+                            + appt.getQueueNumber() + "|" 
+                            + appt.getStudentID() + "|" 
+                            + appt.getCounselorID() + "|" 
+                            + appt.getDate() + "|" 
+                            + appt.getStartTime() + "|" 
+                            + appt.getEndTime() + "|" 
+                            + appt.getBookingType() + "|" 
+                            + appt.getStatus();
             listOfApptText.add(apptText);
         }
 
@@ -278,25 +328,33 @@ public class FileHandler {
         } catch (IOException e) {
             System.out.println("Cannot open the ConsultationRecords file");
         }
+
+        // write into feedback file
+        ArrayList<String> listOfFeedback = new ArrayList<>();
+        for (Feedback feedback : feedbackList) {
+            String feedbackText = feedback.getStudentID() + "|" + feedback.getCounselorID() + "|" + feedback.getFeedback();
+            listOfFeedback.add(feedbackText);
+        }
+
+        try (BufferedWriter feedbackWriter = new BufferedWriter(new FileWriter("dataFiles/feedback.txt"))) {
+            for (String feedback : listOfFeedback) {
+                feedbackWriter.write(feedback);
+                feedbackWriter.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Cannot open the Feedback file");
+        }
     }
 
     public boolean checkLogin(String username, String password) {
         for (User user : userList) {
-            if (user.username.equals(username) && user.password.equals(password)) {
+            if (user.getUsername().equals(username) && user.getPassword().equals(password)) {
                 return true;
             }
         }
         return false;
     }
 
-    /**
-     * @param <T> The type of objects contained in the list
-     * @param prefix The ID prefix (e.g., "STD", "APT", "COU")
-     * @param list The list to scan (e.g., FileHandler.userList)
-     * @param idExtractor A function/lambda to extract the String ID from each object
-     * @return The next formatted ID string (e.g., "STD004")
-    */     
-    
     public static <T> String generateUserID(String prefix, List<T> list, java.util.function.Function<T, String> idExtractor) {
         int max_id = 0;
 
@@ -321,5 +379,74 @@ public class FileHandler {
         // 2. Generate next formatted ID (e.g., APT001, STD005)
         int new_num = max_id + 1;
         return prefix + String.format("%03d", new_num);
+    }
+    
+    public static String validateData(String name, String contact, String email, String password, boolean isNewUser, String currentUserId) {
+
+        // 1. Mandatory Fields Check
+        if (name == null || name.trim().isEmpty() ||
+            contact == null || contact.trim().isEmpty() ||
+            email == null || email.trim().isEmpty()) {
+            return "Full Name, Contact Number, and Email are required.";
+        }
+
+        // 2. Email Format Check
+        if (!email.trim().matches("^[\\w.+-]+@([\\w-]+\\.)+[a-zA-Z]{2,}$")) {
+            return "Please enter a valid email address.";
+        }
+
+        // 3. Contact Number Format Check (7-15 digits, allowing +, -, spaces)
+        if (!contact.trim().matches("^[0-9+\\-\\s]{7,15}$")) {
+            return "Please enter a valid contact number.";
+        }
+
+        // 4. Password Validation (Only checked if creating a new user or explicitly updating password)
+        if (isNewUser || (password != null && !password.trim().isEmpty())) {
+            if (password == null || password.length() < 8) {
+                return "Password must be at least 8 characters long.";
+            }
+            if (!password.matches(".*\\d.*")) {
+                return "Password must contain at least one number.";
+            }
+        }
+
+        // 5. Universal Uniqueness Check against FileHandler.userList across ALL User subclass roles
+        for (User u : FileHandler.userList) {
+            
+            // Skip checking against the user currently being edited
+            if (currentUserId != null && u.getID() != null && u.getID().equalsIgnoreCase(currentUserId)) {
+                continue;
+            }
+
+            String existingEmail = extractEmail(u);
+            String existingContact = extractContact(u);
+
+            if (!existingEmail.isEmpty() && existingEmail.equalsIgnoreCase(email.trim())) {
+                return "A user with this email address already exists in the system.";
+            }
+            
+            if (!existingContact.isEmpty() && existingContact.equals(contact.trim())) {
+                return "A user with this contact number already exists in the system.";
+            }
+        }
+
+        return null; // Passes all validation checks
+    }
+    
+    private static String extractEmail(User u) {
+        if (u instanceof Admin a) return a.getEmail() != null ? a.getEmail() : "";
+        if (u instanceof Counselor c) return c.getEmail() != null ? c.getEmail()  : "";
+        if (u instanceof Receptionist r) return r.getReceptionistEmail() != null ? r.getReceptionistEmail()  : "";
+        if (u instanceof Student s) return s.getEmail() != null ? s.getEmail()  : "";
+        return "";
+    }
+
+    // Helper: Inspects each subclass instance to get contact number without relying on User.java
+    private static String extractContact(User u) {
+        if (u instanceof Admin a) return a.getContactNumber() != null ? a.getContactNumber() : "";
+        if (u instanceof Counselor c) return c.getContactNumber() != null ? c.getContactNumber() : "";
+        if (u instanceof Receptionist r) return r.getReceptionistNumber() != null ? r.getReceptionistNumber() : "";
+        if (u instanceof Student s) return s.getContactNumber() != null ? s.getContactNumber() : "";
+        return "";
     }
 }

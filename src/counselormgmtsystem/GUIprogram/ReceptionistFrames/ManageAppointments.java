@@ -1,22 +1,48 @@
-/*
+ /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package counselormgmtsystem.GUIprogram.ReceptionistFrames;
+
+import counselormgmtsystem.Appointment;
+import counselormgmtsystem.FileHandler;
+import counselormgmtsystem.Receptionist;
+import counselormgmtsystem.Student;
+import counselormgmtsystem.User;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 
 /**
  *
  * @author thesupreme
  */
 public class ManageAppointments extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManageAppointments.class.getName());
+    private static Receptionist currentReceptionist;
+    private DefaultTableModel model;
 
     /**
      * Creates new form ManageAppointments
      */
-    public ManageAppointments() {
-        initComponents();
+    public ManageAppointments(Receptionist currentReceptionist) {
+        this.currentReceptionist = currentReceptionist;
+        initApptTable();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -28,21 +54,561 @@ public class ManageAppointments extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        studentTable = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        apptTable = new javax.swing.JTable();
+        addButton = new javax.swing.JButton();
+        updateButton = new javax.swing.JButton();
+        assignCounBtn = new javax.swing.JButton();
+        delButton = new javax.swing.JButton();
+
+        studentTable.setModel(model);
+        studentTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(studentTable);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(0, 0, 102));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Manage Appointments");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 10, -1, -1));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        apptTable.setModel(model);
+        apptTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(apptTable);
+
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, 800, 370));
+
+        addButton.setBackground(new java.awt.Color(0, 0, 102));
+        addButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        addButton.setForeground(new java.awt.Color(255, 255, 255));
+        addButton.setText("Add Appointment");
+        addButton.setBorderPainted(false);
+        addButton.addActionListener(this::addButtonActionPerformed);
+        jPanel2.add(addButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 430, -1, -1));
+
+        updateButton.setBackground(new java.awt.Color(204, 102, 0));
+        updateButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        updateButton.setForeground(new java.awt.Color(255, 255, 255));
+        updateButton.setText("Update Appointment");
+        updateButton.setBorderPainted(false);
+        updateButton.addActionListener(this::updateButtonActionPerformed);
+        jPanel2.add(updateButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 430, -1, -1));
+
+        assignCounBtn.setBackground(new java.awt.Color(0, 102, 102));
+        assignCounBtn.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        assignCounBtn.setForeground(new java.awt.Color(255, 255, 255));
+        assignCounBtn.setText("Assign Counselor");
+        assignCounBtn.setBorderPainted(false);
+        assignCounBtn.addActionListener(this::assignCounBtnActionPerformed);
+        jPanel2.add(assignCounBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 430, -1, -1));
+
+        delButton.setBackground(new java.awt.Color(204, 0, 0));
+        delButton.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
+        delButton.setForeground(new java.awt.Color(255, 255, 255));
+        delButton.setText("Cancel Appointment");
+        delButton.setBorderPainted(false);
+        delButton.addActionListener(this::delButtonActionPerformed);
+        jPanel2.add(delButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 430, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 950, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 950, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void initApptTable() {
+        String[] columns = {
+            "Appointment ID", "Queue Number", "StudentID", "CounselorID", "Date", "Start Time", "End Time", "Status"
+        };
+
+        this.model = new DefaultTableModel(columns, 0);
+
+        initComponents();
+
+        apptTable.setModel(model);
+
+        apptTable.setRowHeight(28);
+        apptTable.setSelectionBackground(new java.awt.Color(255, 153, 0));
+        apptTable.setSelectionForeground(java.awt.Color.BLACK);
+
+        JTableHeader header = apptTable.getTableHeader();
+        header.setBackground(new java.awt.Color(0, 0, 102));
+        header.setForeground(java.awt.Color.WHITE);
+        header.setFont(new java.awt.Font("SansSerif", java.awt.Font.BOLD, 12));
+
+        header.setOpaque(true);
+
+        header.setDefaultRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(javax.swing.JTable table, Object value,
+                    boolean isSelected, boolean hasFocus, int row, int column) {
+
+                JLabel label = (JLabel) super.getTableCellRendererComponent(
+                        table, value, isSelected, hasFocus, row, column);
+
+                label.setBackground(new Color(0, 0, 102)); // Solid Dark Blue
+                label.setForeground(Color.WHITE);          // White Text
+                label.setFont(new Font("SansSerif", Font.BOLD, 12));
+                label.setHorizontalAlignment(JLabel.CENTER); // Centered header text
+                label.setOpaque(true);                     // Forces color painting
+
+                label.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 1, 1, new Color(200, 200, 200)));
+
+                return label;
+            }
+        });
+
+        apptTable.setAutoCreateColumnsFromModel(true);
+
+        loadTableData();
+    }
+
+    private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
+        JComboBox<String> studentCB = new JComboBox<>();
+        for (User u : FileHandler.userList) {
+            if (u instanceof Student s) {
+                studentCB.addItem(s.getID() + " - " + s.getfullName());
+            }
+        }
+
+        if (studentCB.getItemCount() == 0) {
+            JOptionPane.showMessageDialog(this, "No registered students found in the system!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        JComboBox<String> typeCB = new JComboBox<>(new String[]{"Walk-In", "Online"});
+        typeCB.setSelectedItem("Walk-In");
+
+        JComboBox<String> dateCB = new JComboBox<>();
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        for (int i = 0; i < 7; i++) {
+            dateCB.addItem(today.plusDays(i).format(formatter));
+        }
+
+        JTextField startTimeTF = new JTextField("09:00");
+        JTextField endTimeTF = new JTextField("10:00");
+
+        JPanel formPanel = new JPanel(new GridLayout(5, 2, 10, 10));
+        formPanel.add(new JLabel("Select Student:"));
+        formPanel.add(studentCB);
+        formPanel.add(new JLabel("Booking Type:"));
+        formPanel.add(typeCB);
+        formPanel.add(new JLabel("Appointment Date:"));
+        formPanel.add(dateCB);
+        formPanel.add(new JLabel("Start Time (e.g., 09:00):"));
+        formPanel.add(startTimeTF);
+        formPanel.add(new JLabel("End Time (e.g., 10:00):"));
+        formPanel.add(endTimeTF);
+
+        boolean confirmed = showCustomStyledDialog("Create New Appointment", formPanel);
+
+        if (confirmed) {
+            String selectedStudentStr = (String) studentCB.getSelectedItem();
+            String studentID = selectedStudentStr.split(" - ")[0].trim();
+            String bookingType = (String) typeCB.getSelectedItem();
+            String apptDate = (String) dateCB.getSelectedItem();
+            String startTime = startTimeTF.getText().trim();
+            String endTime = endTimeTF.getText().trim();
+
+            if (startTime.isEmpty() || endTime.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Start Time and End Time are required!", "Validation Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String nextApptID = FileHandler.generateUserID("APT", FileHandler.apptList, Appointment::getApptID);
+            String nextQueueNo = FileHandler.generateUserID("Q", FileHandler.apptList, Appointment::getQueueNumber);
+
+            // Create complete Appointment object
+            Appointment tempAppt = new Appointment(
+                nextApptID, 
+                nextQueueNo, 
+                studentID, 
+                "TBD", // Counselor ID initially unassigned / TBD
+                apptDate, 
+                startTime, 
+                endTime, 
+                bookingType, 
+                "Scheduled"
+            );
+
+            // Invoking Overloaded method in Receptionist
+            boolean success = currentReceptionist.manageRecords("CREATE", tempAppt);
+
+            if (success) {
+                loadTableData();
+                JOptionPane.showMessageDialog(this, "Appointment " + nextApptID + " Created Successfully!\nQueue Number: " + nextQueueNo, "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to create appointment.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_addButtonActionPerformed
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        int selectedRow = apptTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an appointment from the table to update!", "Selection Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String selectedApptID = model.getValueAt(selectedRow, 0).toString();
+        Appointment targetAppt = null;
+
+        for (Appointment a : FileHandler.apptList) {
+            if (a.getApptID().equals(selectedApptID)) {
+                targetAppt = a;
+                break;
+            }
+        }
+
+        if (targetAppt == null) {
+            JOptionPane.showMessageDialog(this, "Selected appointment could not be found!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        JComboBox<String> studentCB = new JComboBox<>();
+        String selectedStudentItem = null;
+
+        for (User u : FileHandler.userList) {
+            if (u instanceof Student s) {
+                String itemStr = s.getID() + " - " + s.getfullName();
+                studentCB.addItem(itemStr);
+                if (s.getID().equals(targetAppt.getStudentID())) {
+                    selectedStudentItem = itemStr;
+                }
+            }
+        }
+        if (selectedStudentItem != null) {
+            studentCB.setSelectedItem(selectedStudentItem);
+        }
+
+        JComboBox<String> typeCB = new JComboBox<>(new String[]{"Walk-In", "Online"});
+        typeCB.setSelectedItem(targetAppt.getBookingType());
+
+        JComboBox<String> dateCB = new JComboBox<>();
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        boolean dateInList = false;
+
+        for (int i = 0; i < 7; i++) {
+            String dateStr = today.plusDays(i).format(formatter);
+            dateCB.addItem(dateStr);
+            if (dateStr.equals(targetAppt.getDate())) {
+                dateInList = true;
+            }
+        }
+
+        if (!dateInList && targetAppt.getDate() != null && !targetAppt.getDate().isEmpty()) {
+            dateCB.insertItemAt(targetAppt.getDate(), 0);
+        }
+        dateCB.setSelectedItem(targetAppt.getDate());
+
+        JTextField startTimeTF = new JTextField(targetAppt.getStartTime());
+        JTextField endTimeTF = new JTextField(targetAppt.getEndTime());
+
+        JPanel formPanel = new JPanel(new GridLayout(5, 2, 10, 10));
+        formPanel.add(new JLabel("Select Student:"));
+        formPanel.add(studentCB);
+        formPanel.add(new JLabel("Booking Type:"));
+        formPanel.add(typeCB);
+        formPanel.add(new JLabel("Appointment Date:"));
+        formPanel.add(dateCB);
+        formPanel.add(new JLabel("Start Time:"));
+        formPanel.add(startTimeTF);
+        formPanel.add(new JLabel("End Time:"));
+        formPanel.add(endTimeTF);
+
+        int result = JOptionPane.showConfirmDialog(
+                this, formPanel, "Update Appointment (" + targetAppt.getApptID() + ")", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (result == JOptionPane.OK_OPTION) {
+            String selectedStudentStr = (String) studentCB.getSelectedItem();
+            String updatedStudentID = selectedStudentStr.split(" - ")[0].trim();
+            String updatedType = (String) typeCB.getSelectedItem();
+            String updatedDate = (String) dateCB.getSelectedItem();
+            String updatedStartTime = startTimeTF.getText().trim();
+            String updatedEndTime = endTimeTF.getText().trim();
+
+            Appointment tempAppt = new Appointment(
+                    targetAppt.getApptID(), "", updatedStudentID, targetAppt.getCounselorID(), updatedDate, updatedStartTime, updatedEndTime, updatedType, targetAppt.getStatus()
+            );
+
+            // Invoking Overloaded method in Receptionist
+            boolean success = currentReceptionist.manageRecords("UPDATE", tempAppt);
+
+            if (success) {
+                loadTableData();
+                JOptionPane.showMessageDialog(this, "Appointment " + targetAppt.getApptID() + " updated successfully!", "Update Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_updateButtonActionPerformed
+
+    private void assignCounBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_assignCounBtnActionPerformed
+        int selectedRow = apptTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an appointment from the table to assign a counselor!", "Selection Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String selectedApptID = model.getValueAt(selectedRow, 0).toString();
+        Appointment targetAppt = null;
+
+        for (Appointment a : FileHandler.apptList) {
+            if (a.getApptID().equals(selectedApptID)) {
+                targetAppt = a;
+                break;
+            }
+        }
+
+        if (targetAppt == null) {
+            return;
+        }
+
+        JComboBox<String> counselorCB = new JComboBox<>();
+        java.util.Map<String, String> statusMap = new java.util.HashMap<>();
+
+        for (User u : FileHandler.userList) {
+            if (u instanceof counselormgmtsystem.Counselor c) {
+                String counselorID = c.getID();
+                String counselorName = c.getfullName();
+
+                boolean isWithinShift = false;
+                String shiftHours = "";
+
+                if (FileHandler.rosterList != null) {
+                    for (counselormgmtsystem.Roster r : FileHandler.rosterList) {
+                        if (r.getCounselorID().equals(counselorID) && r.getDate().equals(targetAppt.getDate())) {
+                            shiftHours = r.getStartTime() + " - " + r.getEndTime();
+                            boolean startsAfterShiftBegin = targetAppt.getStartTime().compareTo(r.getStartTime()) >= 0;
+                            boolean endsBeforeShiftEnd = targetAppt.getEndTime().compareTo(r.getEndTime()) <= 0;
+
+                            if (startsAfterShiftBegin && endsBeforeShiftEnd) {
+                                isWithinShift = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                boolean hasOnlineConflict = false;
+                int walkInOverlapCount = 0;
+
+                if (FileHandler.apptList != null) {
+                    for (Appointment appt : FileHandler.apptList) {
+                        if (appt.getApptID().equals(targetAppt.getApptID()) || "Cancelled".equalsIgnoreCase(appt.getStatus())) {
+                            continue;
+                        }
+
+                        if (counselorID.equals(appt.getCounselorID()) && targetAppt.getDate().equals(appt.getDate())) {
+                            if (targetAppt.getStartTime().compareTo(appt.getEndTime()) < 0
+                                    && targetAppt.getEndTime().compareTo(appt.getStartTime()) > 0) {
+
+                                if ("Online".equalsIgnoreCase(appt.getBookingType())) {
+                                    hasOnlineConflict = true;
+                                } else if ("Walk-In".equalsIgnoreCase(appt.getBookingType())) {
+                                    walkInOverlapCount++;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                String label = "";
+                if (!isWithinShift) {
+                    label = counselorID + " - " + counselorName + " (OFF DUTY / OUTSIDE SHIFT)";
+                    statusMap.put(label, "OFF_DUTY");
+                } else if (hasOnlineConflict) {
+                    label = counselorID + " - " + counselorName + " (BUSY - Online Appt Conflict)";
+                    statusMap.put(label, "ONLINE_CONFLICT");
+                } else if (walkInOverlapCount > 0) {
+                    label = counselorID + " - " + counselorName + " (AVAILABLE - " + walkInOverlapCount + " Walk-In Overlap)";
+                    statusMap.put(label, "WALK_IN_OVERLAP");
+                } else {
+                    label = counselorID + " - " + counselorName + " (AVAILABLE)";
+                    statusMap.put(label, "AVAILABLE");
+                }
+
+                counselorCB.addItem(label);
+                if (counselorID.equals(targetAppt.getCounselorID())) {
+                    counselorCB.setSelectedItem(label);
+                }
+            }
+        }
+
+        JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        formPanel.add(new JLabel("Appointment ID:"));
+        formPanel.add(new JLabel(targetAppt.getApptID() + " (" + targetAppt.getBookingType() + ")"));
+        formPanel.add(new JLabel("Time Slot:"));
+        formPanel.add(new JLabel(targetAppt.getDate() + " [" + targetAppt.getStartTime() + " - " + targetAppt.getEndTime() + "]"));
+        formPanel.add(new JLabel("Assign Counselor:"));
+        formPanel.add(counselorCB);
+
+        int result = JOptionPane.showConfirmDialog(
+                this, formPanel, "Assign Counselor to " + targetAppt.getApptID(), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (result == JOptionPane.OK_OPTION) {
+            String selectedOption = (String) counselorCB.getSelectedItem();
+            String selectedStatus = statusMap.get(selectedOption);
+
+            if ("OFF_DUTY".equals(selectedStatus) || "ONLINE_CONFLICT".equals(selectedStatus)) {
+                JOptionPane.showMessageDialog(this, "Cannot assign! Selected counselor is unavailable during this shift/time slot.", "Assignment Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String assignedCounselorID = selectedOption.split(" - ")[0].trim();
+
+            Appointment tempAppt = new Appointment(targetAppt.getApptID(), "", "", assignedCounselorID, "", "", "", "", "");
+
+            // Invoking Overloaded method in Receptionist
+            boolean success = currentReceptionist.manageRecords("ASSIGN", tempAppt);
+
+            if (success) {
+                loadTableData();
+                JOptionPane.showMessageDialog(this, "Counselor " + assignedCounselorID + " assigned successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_assignCounBtnActionPerformed
+
+
+    private void delButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delButtonActionPerformed
+        int selectedRow = apptTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select an appointment from the table to cancel!", "Selection Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String selectedApptID = model.getValueAt(selectedRow, 0).toString();
+
+        int confirm = JOptionPane.showConfirmDialog(
+                this, "Are you sure you want to cancel and delete Appointment " + selectedApptID + "?", "Confirm Cancel", JOptionPane.YES_NO_OPTION
+        );
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            Appointment tempAppt = new Appointment(selectedApptID, "", "", "", "", "", "", "", "");
+
+            // Invoking Overloaded method in Receptionist
+            boolean success = currentReceptionist.manageRecords("DELETE", tempAppt);
+
+            if (success) {
+                loadTableData();
+                JOptionPane.showMessageDialog(this, "Appointment " + selectedApptID + " cancelled successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_delButtonActionPerformed
+
+    private void loadTableData() {
+        model.setRowCount(0);
+
+        if (FileHandler.apptList != null) {
+            for (Appointment a : FileHandler.apptList) {
+                model.addRow(new Object[]{
+                    a.getApptID(),
+                    a.getQueueNumber(),
+                    a.getStudentID(),
+                    a.getCounselorID(),
+                    a.getDate(),
+                    a.getStartTime(),
+                    a.getEndTime(),
+                    a.getStatus()
+                });
+            }
+        }
+    }
+
+    private boolean showCustomStyledDialog(String title, JPanel contentPanel) {
+        javax.swing.JDialog dialog = new javax.swing.JDialog(this, title, true);
+        dialog.setUndecorated(true); // Removes standard OS window borders
+
+        // Outer Border Container
+        JPanel mainPanel = new JPanel(new java.awt.BorderLayout());
+        mainPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new Color(0, 0, 102), 2)); // Dark Blue Border
+
+        // Header Panel
+        JPanel headerPanel = new JPanel();
+        headerPanel.setBackground(new Color(0, 0, 102)); // Dark Blue
+        headerPanel.setPreferredSize(new java.awt.Dimension(headerPanel.getPreferredSize().width, 40));
+        JLabel headerLabel = new JLabel(title);
+        headerLabel.setFont(new Font("Liberation Sans", Font.BOLD, 16));
+        headerLabel.setForeground(Color.WHITE);
+        headerPanel.add(headerLabel);
+
+        // Style content labels and background
+        contentPanel.setBackground(Color.WHITE);
+        contentPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        for (Component comp : contentPanel.getComponents()) {
+            if (comp instanceof JLabel label) {
+                label.setForeground(new Color(0, 0, 102));
+                label.setFont(new Font("Liberation Sans", Font.BOLD, 13));
+            }
+        }
+
+        // Button Panel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.WHITE);
+        buttonPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 15, 10));
+
+        javax.swing.JButton confirmBtn = new javax.swing.JButton("Confirm");
+        confirmBtn.setBackground(new Color(204, 102, 0)); // Your Orange/Yellow theme
+        confirmBtn.setForeground(Color.WHITE);
+        confirmBtn.setFont(new Font("Liberation Sans", Font.BOLD, 13));
+        confirmBtn.setBorderPainted(false);
+        confirmBtn.setFocusPainted(false);
+
+        javax.swing.JButton cancelBtn = new javax.swing.JButton("Cancel");
+        cancelBtn.setBackground(new Color(102, 102, 102));
+        cancelBtn.setForeground(Color.WHITE);
+        cancelBtn.setFont(new Font("Liberation Sans", Font.BOLD, 13));
+        cancelBtn.setBorderPainted(false);
+        cancelBtn.setFocusPainted(false);
+
+        final boolean[] isConfirmed = {false};
+
+        confirmBtn.addActionListener(e -> {
+            isConfirmed[0] = true;
+            dialog.dispose();
+        });
+
+        cancelBtn.addActionListener(e -> dialog.dispose());
+
+        buttonPanel.add(confirmBtn);
+        buttonPanel.add(cancelBtn);
+
+        mainPanel.add(headerPanel, java.awt.BorderLayout.NORTH);
+        mainPanel.add(contentPanel, java.awt.BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, java.awt.BorderLayout.SOUTH);
+
+        dialog.setContentPane(mainPanel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+
+        return isConfirmed[0];
+    }
 
     /**
      * @param args the command line arguments
@@ -53,6 +619,14 @@ public class ManageAppointments extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
+
+        UIManager.put("OptionPane.background", Color.WHITE);
+        UIManager.put("Panel.background", Color.WHITE);
+        UIManager.put("OptionPane.messageForeground", new Color(0, 0, 102)); // Dark Blue Text
+        UIManager.put("Button.background", new Color(204, 102, 0));          // Orange/Yellow Buttons
+        UIManager.put("Button.foreground", Color.WHITE);
+        UIManager.put("Button.font", new Font("Liberation Sans", Font.BOLD, 13));
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -66,9 +640,21 @@ public class ManageAppointments extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ManageAppointments().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new ManageAppointments(currentReceptionist).setVisible(true));
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addButton;
+    private javax.swing.JTable apptTable;
+    private javax.swing.JButton assignCounBtn;
+    private javax.swing.JButton delButton;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable studentTable;
+    private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
 }

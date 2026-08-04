@@ -1,3 +1,5 @@
+
+
 package counselormgmtsystem;
 
 //abstract because dont want to randomly create a user object
@@ -6,14 +8,16 @@ public abstract class User {
     protected String username;
     protected String password;
     protected String fullName;
+    protected String status;
 
 
     //constructor
-    public User(String ID, String username, String password, String fullName) {
+    public User(String ID, String username, String password, String fullName, String status) {
         this.ID = ID;
         this.username = username;
         this.password = password;
         this.fullName = fullName;
+        this.status = status;
     }
 
     // getter & setter
@@ -47,6 +51,14 @@ public abstract class User {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
-    }    
+    }   
+    
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
         
 }

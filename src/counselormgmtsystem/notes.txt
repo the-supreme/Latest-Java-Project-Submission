@@ -50,3 +50,64 @@ write code for login, redirect to display actions
 
 student table
 String ID, String username, String fullName, String intakeCode, String email, String contactNumber, String emergencyContact
+
+
+
+
+-- if a student is deleted, appointment should be deleted
+-- input validation
+
+
+
+
+ok so student books a time slot
+inside roster we have counselor, working hours and days
+then receptionist need to assign a counselor to a student
+if two students want at the same time, queue number(1, 2, 3)
+if the counselor unavailable just cancel appointment
+
+
+students feedback portal
+- involved roles (STUDENT, COUNSELOR, ADMIN)
+TABLES: Counselor Table, but no show in system, only admin can view
+
+
+- Admin - counselor.txt, receptionist.txt, roster.txt, appointment.txt
+- Counselor - roster.txt, appointment.txt, consultationRecords.txt
+- Receptionist - student.txt, appointment.txt, roster.txt, counselor.txt
+- Student - appointment.txt, counselor.txt
+
+there is an issue now thought... so basically when the program starts we load all the fiels
+
+
+
+walk-in only queue number (Assumption: walk-in cannot choose time, can only queue)
+
+
+
+now we make add delete, update functions work
+
+assumption: dates for a week
+recep only handle walkin appointments themselves
+walkin can book for today only
+but in the system can book up to a week, only in situation where people walk in, no available counselors, then can book as online, for different date.
+
+-- I need to connect mainframes to supporting frames -- 
+
+
+
+ahtan: counselor no methods, all logics in gui haish!!!! 
+
+
+need to add icons, check all icons, fix them
+change buttons and gui to cleaner
+input validation
+delete data validation for roster-> instead put in recep
+export to pdf and excel
+roster text file add records for a week to a month from now
+
+
+DONE COMPILE ALL
+NEXT UP:- NEED TO ADD ICONS
+
+

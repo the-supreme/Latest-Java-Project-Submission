@@ -3,14 +3,21 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/GUIprogram/ReceptionistFrames/ReceptionistMainFrame.java</file>
-            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/Admin.java</file>
-            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/GUIprogram/ReceptionistFrames/ManageStudent.java</file>
-            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/LoginFrame.java</file>
             <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/User.java</file>
-            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/FileHandler.java</file>
-            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/Receptionist.java</file>
+            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/ConsultationRecords.java</file>
+            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/GUIprogram/ReceptionistFrames/ReceptionistMainFrame.java</file>
+            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/GUIprogram/CounselorFrames/CounselorMainFrame.java</file>
+            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/GUIprogram/StudentFrames/StudentMainFrame.java</file>
             <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/Student.java</file>
+            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/FileHandler.java</file>
+            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/Admin.java</file>
+            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/LoginFrame.java</file>
+            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/Receptionist.java</file>
+            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/GUIprogram/CounselorFrames/StudentConsultationRecordsFrame.java</file>
+            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/GUIprogram/CounselorFrames/ViewRosterFrame.java</file>
+            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/GUIprogram/CounselorFrames/AddConsultationNoteFrame.java</file>
+            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/GUIprogram/CounselorFrames/ViewAssignedAppointmentsFrame.java</file>
+            <file>file:/home/thesupreme/Documents/Coding%20Projects/CounselorMGMTSystem/src/counselormgmtsystem/GUIprogram/StudentFrames/StudentDashboardGUI.java</file>
         </group>
     </open-files>
 </project-private>

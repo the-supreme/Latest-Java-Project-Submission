@@ -310,6 +310,9 @@ import javax.swing.JOptionPane;
 
         navItem02.setBackground(new java.awt.Color(0, 0, 102));
         navItem02.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                navItem02MouseClicked(evt);
+            }
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 navItem02MouseEntered(evt);
             }
@@ -481,6 +484,18 @@ import javax.swing.JOptionPane;
             javax.swing.JOptionPane.showMessageDialog(this, "Error: " + t.toString());
         }
     }//GEN-LAST:event_navItem01MouseClicked
+
+    private void navItem02MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem02MouseClicked
+        try {
+            // Try creating and displaying the frame
+            ManageAppointments apptframe = new ManageAppointments(this.currentUser);
+            apptframe.setVisible(true);
+
+        } catch (Throwable t) {
+            t.printStackTrace();
+            javax.swing.JOptionPane.showMessageDialog(this, "Error: " + t.toString());
+        }
+    }//GEN-LAST:event_navItem02MouseClicked
 
     
     

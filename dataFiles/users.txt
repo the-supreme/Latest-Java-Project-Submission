@@ -1,13 +1,12 @@
-ADM001|sarah_admin|admin123|Sarah Jenkins
-ADM002|david_boss|mgmPass9|David Miller
-ADM003|evelyn_c|adminPass3|Evelyn Choo
-ADM004|faizal_a|adminPass4|Faizal Ahmed
-CNS001|dr_anand|cnsPass1|Dr. Anand Raj
-CNS002|clara_wong|cnsPass2|Clara Wong
-CNS003|dr_lee|cnsPass3|Dr. Lee Wei
-REC001|kumar_dagoat|recPass1|Kumar Anbalagan
-REC002|amy_tan|recPass2|Amy Tan Swee Lin
-STD001|alex_lee|stdPass1|Alex Lee Jia Earn
-STD002|priya_sharma|stdPass2|Priya Sharma
-STD003|ryan_tan|stdPass3|Ryan Tan Meng
-STD004|meera_nair|stdPass4|Meera Nair
+ADM001|sarah_admin|admin123|Sarah Jenkins|Active
+ADM002|david_boss|mgmPass9|David Miller|Active
+ADM003|evelyn_c|adminPass3|Evelyn Choo|Active
+ADM004|faizal_a|adminPass4|Faizal Ahmed|Active
+CNS001|dr_anand|cnsPass1|Dr. Anand Raj|Inactive
+CNS002|clara_wong|cnsPass2|Clara Wong|Active
+REC001|kumar_dagoat|recPass1|Kumar Anbalagan|Inactive
+STD001|alex_lee|stdPass1|Alex Lee Jia Earn|Active
+STD002|priya_sharma|stdPass2|Priya Sharma|Active
+STD003|ryan_tan|stdPass3|Ryan Tan Meng|Active
+STD004|meera_nair|stdPass4|Meera Nair|Active
+REC002|suranjan|Admin1234|SURANJAN|Active

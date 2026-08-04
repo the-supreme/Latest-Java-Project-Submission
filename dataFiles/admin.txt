@@ -1,4 +1,4 @@
 ADM001|012-7778881|sarah.jenkins@apu.edu.my|Block B, Level 3, Room 302
-ADM002|012-7778882|david.miller@apu.edu.my|Block B, Level 3, Room 305
+ADM002|012-7778882|david-miller@apu.edu.my|Block B, Level 3, Room 305
 ADM003|013-4449991|evelyn.choo@apu.edu.my|Block A, Level 2, Room 211
 ADM004|019-5552223|faizal.ahmed@apu.edu.my|Block C, Level 4, Room 401

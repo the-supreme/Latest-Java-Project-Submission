@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package counselormgmtsystem.GUIprogram.ReceptionistFrames;
-
 import counselormgmtsystem.FileHandler;
 import counselormgmtsystem.Receptionist;
 import counselormgmtsystem.Student;
@@ -52,8 +51,8 @@ public class ManageStudent extends javax.swing.JFrame {
         studentTable.setModel(model);
         
         studentTable.setRowHeight(28);
-        studentTable.setSelectionBackground(new java.awt.Color(0, 0, 102));
-        studentTable.setSelectionForeground(java.awt.Color.WHITE);
+        studentTable.setSelectionBackground(new java.awt.Color(255,153,0));
+//        studentTable.setSelectionForeground(java.awt.Color.WHITE);
 
         JTableHeader header = studentTable.getTableHeader();
         header.setBackground(new java.awt.Color(0, 0, 102));
@@ -91,8 +90,8 @@ public class ManageStudent extends javax.swing.JFrame {
                     s.getID(),
                     s.getUsername(),
                     s.getfullName(),
-                    s.getintakeCode(),
-                    s.getStudentEmail(),
+                    s.getIntakeCode(),
+                    s.getEmail(),
                     s.getContactNumber(),
                     s.getEmergencyContact()
                 });
@@ -118,8 +117,8 @@ public class ManageStudent extends javax.swing.JFrame {
                             nameTF.setText(s.getfullName());       // Check your getter spelling if this errors!
                             usernameTF.setText(s.getUsername());
                             passwordTF.setText(s.getPassword());
-                            icTF.setText(s.getintakeCode());       
-                            emailTF.setText(s.getStudentEmail());
+                            icTF.setText(s.getIntakeCode());       
+                            emailTF.setText(s.getEmail());
                             cnTF.setText(s.getContactNumber());
                             ecTF.setText(s.getEmergencyContact());
                             break; // Stop looping once we found the student
@@ -208,14 +207,14 @@ public class ManageStudent extends javax.swing.JFrame {
 
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Name: ");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 35, -1, -1));
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 40, -1, -1));
 
         nameTF.addActionListener(this::nameTFActionPerformed);
         jPanel2.add(nameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 40, 190, -1));
 
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText(" Username:");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 94, 111, -1));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 100, 80, -1));
         jPanel2.add(usernameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 100, 190, -1));
 
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
@@ -244,10 +243,10 @@ public class ManageStudent extends javax.swing.JFrame {
 
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
         jLabel8.setText("Password: ");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 111, -1));
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 150, 90, 20));
 
         passwordTF.addActionListener(this::passwordTFActionPerformed);
-        jPanel2.add(passwordTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 160, 190, -1));
+        jPanel2.add(passwordTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 150, 190, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -278,8 +277,8 @@ public class ManageStudent extends javax.swing.JFrame {
                     s.getID(),
                     s.getUsername(),
                     s.getfullName(),
-                    s.getintakeCode(),
-                    s.getStudentEmail(),
+                    s.getIntakeCode(),
+                    s.getEmail(),
                     s.getContactNumber(),
                     s.getEmergencyContact()
                 });

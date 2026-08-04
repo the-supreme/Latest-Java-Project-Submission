@@ -1,21 +1,60 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package counselormgmtsystem;
 
-public class Counselor extends User{
+/**
+ *
+ * @author tzhen
+ */
+
+public class Counselor extends User {
     String specialization;
     String contactNumber;
     String email;
 
-    public Counselor(String ID, String username, String password, String fullName, String specialization, String contactNumber, String email) {
-        super(ID, username, password, fullName);
+
+    public Counselor(String ID, String username, String password, String fullName, String status, String specialization, String contactNumber, String email) {
+        super(ID, username, password, fullName, status);
         this.specialization = specialization;
+        this.contactNumber = contactNumber;
         this.email = email;
-        this.contactNumber = contactNumber; 
     }
 
-    @Override
-    public String toString() {
-        return "User: " + this.ID
-         + " " + this.username + " " + this.password + " " + this.fullName + " " + " " + this.contactNumber + " " + this.email + " " + this.specialization ;
+
+    public Counselor(String ID, String username, String password, String fullName) {
+        super(ID, username, password, fullName, "Available");
+        this.specialization = "General Counseling";
+        this.contactNumber = "Not Set";
+        this.email = "Not Set";
     }
 
+    public String toFileLine() {
+        return ID + "|" + specialization + "|" + contactNumber + "|" + email;
+    }
+
+    public String getSpecialization() {
+        return specialization;
+    }
+
+    public void setSpecialization(String specialization) {
+        this.specialization = specialization;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
