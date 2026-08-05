@@ -30,7 +30,6 @@ public class adminManageRoster extends javax.swing.JFrame {
         
         model.setColumnIdentifiers(columnName);
         initComponents();
-        statusCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Booked" }));
         loadRosters();
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
@@ -53,8 +52,6 @@ public class adminManageRoster extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         addBtn = new javax.swing.JButton();
-        statusCombo = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
         endTf = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -126,13 +123,6 @@ public class adminManageRoster extends javax.swing.JFrame {
         addBtn.addActionListener(this::addBtnActionPerformed);
         jPanel1.add(addBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(42, 267, -1, -1));
 
-        statusCombo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Available", "Booked" }));
-        statusCombo.addActionListener(this::statusComboActionPerformed);
-        jPanel1.add(statusCombo, new org.netbeans.lib.awtextra.AbsoluteConstraints(223, 199, 71, -1));
-
-        jLabel7.setText("Status");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 202, 70, -1));
-
         endTf.addActionListener(this::endTfActionPerformed);
         jPanel1.add(endTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(223, 159, 71, -1));
 
@@ -203,7 +193,6 @@ public class adminManageRoster extends javax.swing.JFrame {
         dateTf.setText("");
         startTf.setText("");
         endTf.setText("");
-        statusCombo.setSelectedIndex(0);
         rosterTable.clearSelection();
         selectedRoster = null;
     }
@@ -245,54 +234,6 @@ public class adminManageRoster extends javax.swing.JFrame {
          applyFilters();
     }//GEN-LAST:event_searchBtnActionPerformed
    
-    private void dateTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateTfActionPerformed
-        dateTf.requestFocus();
-    }//GEN-LAST:event_dateTfActionPerformed
-
-    private void counselorIdTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_counselorIdTfActionPerformed
-        counselorIdTf.requestFocus();
-    }//GEN-LAST:event_counselorIdTfActionPerformed
-
-    private void startTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startTfActionPerformed
-        startTf.requestFocus();
-    }//GEN-LAST:event_startTfActionPerformed
-
-    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
-        if (selectedRoster == null) return;
-
-            String error = currentAdmin.validateData(counselorIdTf.getText(), dateTf.getText(), startTf.getText(), endTf.getText(), selectedRoster.getRosterID());
-            if (error != null) { JOptionPane.showMessageDialog(this, error); return; }
-
-            selectedRoster.setCounselorID(counselorIdTf.getText().trim());
-            selectedRoster.setDate(dateTf.getText().trim());
-            selectedRoster.setStartTime(startTf.getText().trim());
-            selectedRoster.setEndTime(endTf.getText().trim());
-
-            currentAdmin.manageRecord(FileHandler.rosterList, selectedRoster, "UPDATE");
-            loadRosters();
-    }//GEN-LAST:event_editBtnActionPerformed
-
-    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
-        if (selectedRoster == null) return;
-            if (JOptionPane.showConfirmDialog(this, "Delete?") == JOptionPane.YES_OPTION) {
-                currentAdmin.manageRecord(FileHandler.rosterList, selectedRoster, "DELETE");
-                loadRosters();
-            }
-    }//GEN-LAST:event_deleteBtnActionPerformed
-
-    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
-        String error = currentAdmin.validateData(counselorIdTf.getText(), dateTf.getText(), startTf.getText(), endTf.getText(), null);
-            if (error != null) { JOptionPane.showMessageDialog(this, error); return; }
-
-            Roster newR = new Roster("", counselorIdTf.getText().trim(), dateTf.getText().trim(), startTf.getText().trim(), endTf.getText().trim());
-            currentAdmin.manageRecord(FileHandler.rosterList, newR, "ADD");
-
-            loadRosters();
-    }//GEN-LAST:event_addBtnActionPerformed
-
-    private void statusComboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusComboActionPerformed
-    }//GEN-LAST:event_statusComboActionPerformed
-
     private void rosterTableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rosterTableMouseReleased
         int viewRow = rosterTable.getSelectedRow();
 
@@ -315,9 +256,6 @@ public class adminManageRoster extends javax.swing.JFrame {
         selectedRoster = rosterRefs.get(modelRow);
     }//GEN-LAST:event_rosterTableMouseReleased
 
-    private void endTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endTfActionPerformed
-    }//GEN-LAST:event_endTfActionPerformed
-
     private void dateFilterBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateFilterBtnActionPerformed
         applyFilters();
     }//GEN-LAST:event_dateFilterBtnActionPerformed
@@ -327,6 +265,55 @@ public class adminManageRoster extends javax.swing.JFrame {
         viewSchedulePage.setLocationRelativeTo(null);
         viewSchedulePage.setVisible(true);
     }//GEN-LAST:event_scheduleBtnActionPerformed
+
+    private void endTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_endTfActionPerformed
+
+    }//GEN-LAST:event_endTfActionPerformed
+
+    private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
+        String error = currentAdmin.validateData(counselorIdTf.getText(), dateTf.getText(), startTf.getText(), endTf.getText(), null);
+        if (error != null) { JOptionPane.showMessageDialog(this, error); return; }
+
+        Roster newR = new Roster("", counselorIdTf.getText().trim(), dateTf.getText().trim(), startTf.getText().trim(), endTf.getText().trim());
+        currentAdmin.manageRecord(FileHandler.rosterList, newR, "ADD");
+
+        loadRosters();
+    }//GEN-LAST:event_addBtnActionPerformed
+
+    private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
+        if (selectedRoster == null) return;
+        if (JOptionPane.showConfirmDialog(this, "Delete?") == JOptionPane.YES_OPTION) {
+            currentAdmin.manageRecord(FileHandler.rosterList, selectedRoster, "DELETE");
+            loadRosters();
+        }
+    }//GEN-LAST:event_deleteBtnActionPerformed
+
+    private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
+        if (selectedRoster == null) return;
+
+        String error = currentAdmin.validateData(counselorIdTf.getText(), dateTf.getText(), startTf.getText(), endTf.getText(), selectedRoster.getRosterID());
+        if (error != null) { JOptionPane.showMessageDialog(this, error); return; }
+
+        selectedRoster.setCounselorID(counselorIdTf.getText().trim());
+        selectedRoster.setDate(dateTf.getText().trim());
+        selectedRoster.setStartTime(startTf.getText().trim());
+        selectedRoster.setEndTime(endTf.getText().trim());
+
+        currentAdmin.manageRecord(FileHandler.rosterList, selectedRoster, "UPDATE");
+        loadRosters();
+    }//GEN-LAST:event_editBtnActionPerformed
+
+    private void startTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startTfActionPerformed
+        startTf.requestFocus();
+    }//GEN-LAST:event_startTfActionPerformed
+
+    private void counselorIdTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_counselorIdTfActionPerformed
+        counselorIdTf.requestFocus();
+    }//GEN-LAST:event_counselorIdTfActionPerformed
+
+    private void dateTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateTfActionPerformed
+        dateTf.requestFocus();
+    }//GEN-LAST:event_dateTfActionPerformed
 
 
     public static void main(String args[]) {
@@ -342,12 +329,6 @@ public class adminManageRoster extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println("Warning: Data load failed: " + e.getMessage());
         }
-
-        java.awt.EventQueue.invokeLater(() -> {
-            //**dummy admin, delete ltr
-            Admin mockupAdmin = new Admin("ADM000", "admin", "admin123", "System Admin", "012-3456789", "admin@apu.edu.my", "Room 4.2");
-            new adminManageRoster(mockupAdmin).setVisible(true);
-        });
         
     }
     
@@ -367,7 +348,6 @@ public class adminManageRoster extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -378,7 +358,6 @@ public class adminManageRoster extends javax.swing.JFrame {
     private javax.swing.JButton searchBtn;
     private javax.swing.JTextField searchTf;
     private javax.swing.JTextField startTf;
-    private javax.swing.JComboBox<String> statusCombo;
     // End of variables declaration//GEN-END:variables
 
 }

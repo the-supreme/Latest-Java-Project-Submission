@@ -1,3 +1,9 @@
-RC001|APT001|STD001|CNS003|2026-08-01|Student expressed immense stress managing their OOP assignment deadlines alongside club commitments.|Advised breaking down tasks into smaller modules. Scheduled a follow-up check-i next week.
-RC002|APT002|STD002|CNS002|2026-08-01|Archived past record: discussed career choices and shifting majors from IT to Software Engineering.|Provided structural breakdown of elective variations. Student feels more confident.
-RC004|APT002|STD002|CNS002|2026-08-01|he no good|hes good
+RC001|APT001|STD001|CNS001|2024-03-10|Student expressed immense stress managing their OOP assignment deadlines alongside club commitments.|Advised breaking down tasks into smaller modules. Scheduled a follow-up check-in next week.
+RC002|APT002|STD002|CNS002|2024-05-15|Archived past record: discussed career choices and shifting majors from IT to Software Engineering.|Provided structural breakdown of elective variations. Student feels more confident.
+RC003|APT003|STD003|CNS003|2024-11-20|Archived past record: Student coping with family grief. Expressed trouble concentrating during lectures.|Extended academic empathy documentation draft to be processed via Faculty administration.
+RC004|APT004|STD004|CNS001|2025-02-14|Student requested immediate support regarding minor panic attacks experienced during presentations.|Taught box-breathing coping mechanisms. Recommended visiting the campus clinic if symptoms intensify.
+RC005|APT005|STD001|CNS003|2025-06-25|Initial intake consultation regarding time management and balancing academic coursework.|Assigned personal schedule planning sheet and set goal for next appointment.
+RC006|APT010|STD005|CNS004|2026-08-15|Student discussed internship placement options and resume building.|Provided feedback on current resume draft and suggested 3 potential IT firms for application.
+RC007|APT011|STD006|CNS005|2026-08-15|Student reported feeling overwhelmed by recent mid-term results and general burnout.|Explored study habits and introduced active recall techniques. Scheduled a follow-up.
+RC008|APT015|STD001|CNS001|2024-04-05|Follow up on OOP assignment stress.|Student has successfully submitted the assignment and reports lower stress levels.
+RC009|APT016|STD003|CNS002|2025-01-20|General academic guidance and checking on progress.|Student is maintaining a stable GPA and has joined a study group.

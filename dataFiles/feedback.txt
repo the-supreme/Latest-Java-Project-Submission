@@ -1,4 +1,5 @@
 STD001|CNS001|The counselor was helpful and patient.
 STD004|CNS002|The session helped me manage presentation anxiety.
 STD001|CNS001|hes a good guy i love him
-STD001|CNS001|abc
+STD005|CNS004|Very insightful advice on my resume, feeling much more prepared.
+STD006|CNS005|Dr. James was very understanding and gave me practical study tips.

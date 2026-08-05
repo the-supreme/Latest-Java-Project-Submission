@@ -1,3 +1,4 @@
 REC001|011-2223334|kumar.s@apu.edu.my
-REC002|123456789|suranjan@rajendran.com
-REC003|01410932|ali@gamil.com
+REC002|123456789|suranjan@gmail.com
+REC003|019-3334445|siti.n@apu.edu.my
+REC004|016-7778889|jason.w@apu.edu.my

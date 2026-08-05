@@ -1,3 +1,5 @@
 CNS001|Academic Stress & Anxiety|012-3456789|anand.raj@apu.edu.my
 CNS002|Academic Stress & Anxiety|012-3456769|kumar@apu.edu.my
-CNS003|Trauma Relief|014-001340249|abu.bakar@gmail.com
+CNS003|Career Guidance|012-9998887|dr.lee@apu.edu.my
+CNS004|Career Guidance|013-4445556|farah.ann@apu.edu.my
+CNS005|Mental Health & Trauma|011-8887776|james.carter@apu.edu.my

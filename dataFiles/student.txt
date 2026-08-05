@@ -1,6 +1,7 @@
 STD001|UC2F2604SE|alex.lee@mail.apu.edu.my|016-5554433|016-5550000 (Father)
+STD002|UC2F2605CS|priya.s@mail.apu.edu.my|018-7776655|018-7771111 (Mother)
 STD003|UC2F2604BIT|ryan.tan@mail.apu.edu.my|011-3332221|011-3339999 (Brother)
 STD004|UC2F2605AP|meera.n@mail.apu.edu.my|019-2228888|019-2221111 (Guardian)
-STD005|UCDF2402ICT|sowserene@gmail.com|010-9410930|019-4081209
-STD006|ucdf134ad|abubakar@gmail.com|0123491934|0152312341
-STD008|UCDF120ICTSE|ali@gmail.com|019-3490282|019-3490282
+STD005|UC2F2606SE|wei.jian@mail.apu.edu.my|012-1113333|012-1114444 (Mother)
+STD006|UC2F2604CS|sarah.c@mail.apu.edu.my|014-2225555|014-2226666 (Father)
+STD007|UC2F2605BIT|ahmed.a@mail.apu.edu.my|017-3337777|017-3338888 (Guardian)

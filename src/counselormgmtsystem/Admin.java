@@ -53,7 +53,6 @@ public class Admin extends User {
         this.officeRoom = officeRoom;
     }
 
-
 //manage users
     public void manageRecord(ArrayList<User> userList, User targetUser, String action) {
         if (userList == null || targetUser == null || action == null) {
@@ -129,7 +128,7 @@ public class Admin extends User {
                     if (rosterList.get(i).getRosterID().equals(targetRoster.getRosterID())) {
                         rosterList.set(i, targetRoster);
                         System.out.println("--- Roster " + targetRoster.getRosterID() + " successfully updated ---");
-                        new FileHandler().saveDataToFiles(); 
+                        new FileHandler().saveDataToFiles();
                         return;
                     }
                 }
@@ -141,7 +140,7 @@ public class Admin extends User {
                     if (rosterList.get(i).getRosterID().equals(targetRoster.getRosterID())) {
                         rosterList.remove(i);
                         System.out.println("--- Roster " + targetRoster.getRosterID() + " successfully deleted ---");
-                        new FileHandler().saveDataToFiles(); 
+                        new FileHandler().saveDataToFiles();
                         return;
                     }
                 }
@@ -152,9 +151,9 @@ public class Admin extends User {
                 System.out.println("Error: unsupported action \"" + action + "\". Use ADD, UPDATE, or DELETE.");
         }
 
-        new FileHandler().saveDataToFiles(); 
+        new FileHandler().saveDataToFiles();
     }
-    
+
     public String validateData(String counselorId, String dateStr, String startStr, String endStr, String currentRosterId) {
         if (counselorId.trim().isEmpty() || dateStr.trim().isEmpty() || startStr.trim().isEmpty() || endStr.trim().isEmpty()) {
             return "Counselor ID, Date, Start Time and End Time are required.";
@@ -197,10 +196,10 @@ public class Admin extends User {
             return "End Time must be after Start Time.";
         }
 
-        // Timeframe validation: must be between 1 and 2 hours
+        // UPDATED: Shift duration validation for rosters
         long durationMinutes = Duration.between(startTime, endTime).toMinutes();
-        if (durationMinutes < 60 || durationMinutes > 120) {
-            return "A roster slot must be between 1 and 2 hours long.";
+        if (durationMinutes < 30) {
+            return "A roster shift must be at least 30 minutes long.";
         }
 
         LocalTime shiftStartLimit = LocalTime.of(8, 0);  // 08:00
@@ -218,6 +217,7 @@ public class Admin extends User {
             return "You cannot schedule a roster more than 3 months in advance.";
         }
 
+        // Overlap and duplicate slot validation
         for (Roster r : FileHandler.rosterList) {
             if (currentRosterId != null && r.rosterID.equalsIgnoreCase(currentRosterId)) {
                 continue;
@@ -441,7 +441,6 @@ public class Admin extends User {
             return recordDate.startsWith(filterMatch);
         }
     }
-
 
     @Override
     public String toString() {
