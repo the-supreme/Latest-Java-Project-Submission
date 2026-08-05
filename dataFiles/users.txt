@@ -13,5 +13,4 @@ STD005|sow_serene12|s2r2n3@123|Sow Serene|Active
 STD006|abu|abubakar|Abu|Active
 REC003|ali|ali@01933|ali|Active
 CNS003|abubakar|0987654321|Abubakar|Active
-STD007|adsofi|adfa1983|akdsjf|Active
 STD008|ali_31123|asalkjdf|Ali|Active

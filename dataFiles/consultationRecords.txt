@@ -1,3 +1,3 @@
-REC001|APT001|STD001|CNS003|2026-08-01|Student expressed immense stress managing their OOP assignment deadlines alongside club commitments.|Advised breaking down tasks into smaller modules. Scheduled a follow-up check-i next week.
-REC002|APT002|STD002|CNS002|2026-08-01|Archived past record: discussed career choices and shifting majors from IT to Software Engineering.|Provided structural breakdown of elective variations. Student feels more confident.
-REC004|APT002|STD002|CNS002|2026-08-01|he no good|hes good
+RC001|APT001|STD001|CNS003|2026-08-01|Student expressed immense stress managing their OOP assignment deadlines alongside club commitments.|Advised breaking down tasks into smaller modules. Scheduled a follow-up check-i next week.
+RC002|APT002|STD002|CNS002|2026-08-01|Archived past record: discussed career choices and shifting majors from IT to Software Engineering.|Provided structural breakdown of elective variations. Student feels more confident.
+RC004|APT002|STD002|CNS002|2026-08-01|he no good|hes good

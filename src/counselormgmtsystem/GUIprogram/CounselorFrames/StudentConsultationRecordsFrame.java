@@ -380,7 +380,7 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
         }
 
         // Auto-generate Record ID
-        String newRecordID = FileHandler.generateUserID("REC", FileHandler.consultList, ConsultationRecords::getRecordID);
+        String newRecordID = FileHandler.generateUserID("RC", FileHandler.consultList, ConsultationRecords::getRecordID);
         String studentID = findStudentIDFromAppt(apptID);
         String counselorID = (currentCounselor != null) ? currentCounselor.getID() : "CNS001";
 

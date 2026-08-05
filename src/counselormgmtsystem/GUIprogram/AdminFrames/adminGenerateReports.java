@@ -452,12 +452,68 @@ public class adminGenerateReports extends javax.swing.JFrame {
         }
     }
 
+    private boolean validateInputs(String timeframe, String yearStr, String dateStr) {
+        // 1. Validate Year
+        if (yearStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid 4-digit year (e.g., 2026).", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        try {
+            int year = Integer.parseInt(yearStr);
+            if (year < 2000 || year > 2100) {
+                JOptionPane.showMessageDialog(this, "Year must be between 2000 and 2100.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Year must be a valid number.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        // 2. Validate Date/Month/Quarter field based on selected timeframe
+        switch (timeframe) {
+            case "Daily":
+                // Format expected: MM-DD or M-D (e.g. 05-20 or 5-20)
+                if (!dateStr.matches("^(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$")) {
+                    JOptionPane.showMessageDialog(this, "For 'Daily' timeframe, format must be MM-DD (e.g., 05-12).", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
+                break;
+
+            case "Monthly":
+                // Format expected: MM or M (e.g. 05 or 5)
+                if (!dateStr.matches("^(0?[1-9]|1[0-2])$")) {
+                    JOptionPane.showMessageDialog(this, "For 'Monthly' timeframe, format must be MM (e.g., 05 for May).", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
+                break;
+
+            case "Quarterly":
+                // Format expected: Q1, Q2, Q3, Q4 or 1, 2, 3, 4
+                if (!dateStr.matches("(?i)^(Q[1-4]|[1-4])$")) {
+                    JOptionPane.showMessageDialog(this, "For 'Quarterly' timeframe, enter Q1, Q2, Q3, or Q4.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                    return false;
+                }
+                break;
+
+            case "Yearly":
+                // For yearly reports, specific month/day input isn't strictly necessary, but clear it or ignore safely
+                break;
+        }
+
+        return true;
+    }
+
     private void generateBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateBtnActionPerformed
         String category = (String) jComboBox2.getSelectedItem();
         String timeframe = (String) jComboBox1.getSelectedItem();
         String yearStr = yearTf.getText().trim();
         String dateStr = dateTf.getText().trim();
-
+        
+        if (!validateInputs(timeframe, yearStr, dateStr)) {
+            return;
+        }
+        
         currentAdmin.generateReport(category, timeframe, yearStr, dateStr, this);
 
         }//GEN-LAST:event_generateBtnActionPerformed

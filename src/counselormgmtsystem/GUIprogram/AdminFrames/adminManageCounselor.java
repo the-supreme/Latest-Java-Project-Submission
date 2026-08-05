@@ -20,6 +20,8 @@ public class adminManageCounselor extends javax.swing.JFrame {
     private ArrayList<Counselor> counselorRefs = new ArrayList<>();
     private Counselor selectedCounselor = null;
 
+    private TableRowSorter<DefaultTableModel> sorter;
+
     private Admin currentAdmin;
 
     public adminManageCounselor(Admin admin) {
@@ -31,6 +33,8 @@ public class adminManageCounselor extends javax.swing.JFrame {
 
         model.setColumnIdentifiers(columnName);
         initComponents();
+        sorter = new TableRowSorter<>(model);
+        recepTable.setRowSorter(sorter);
         statusCb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Active", "Inactive"}));
         loadCounselors();
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -60,6 +64,10 @@ public class adminManageCounselor extends javax.swing.JFrame {
         statusCb.setSelectedIndex(0);
         recepTable.clearSelection();
         selectedCounselor = null;
+
+        if (sorter != null) {
+            sorter.setRowFilter(null);
+        }
     }
 
     private String validateInputs(String name, String username, String contact, String email, String password, boolean isNewUser, String currentID) {
@@ -88,15 +96,13 @@ public class adminManageCounselor extends javax.swing.JFrame {
     }
 
     private void applyFilters() {
-        TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<>(model);
-        recepTable.setRowSorter(sorter);
-
         String generalQuery = searchTf.getText().trim();
 
-        if (generalQuery.isEmpty() || generalQuery.equals("Search...")) {
+        if (generalQuery.isEmpty() || generalQuery.equalsIgnoreCase("Search...")) {
             sorter.setRowFilter(null);
         } else {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + generalQuery, 1, 2, 3));
+            // [UPDATED] Case-insensitive regex filter applied across all table columns
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + java.util.regex.Pattern.quote(generalQuery)));
         }
     }
 
@@ -387,7 +393,7 @@ public class adminManageCounselor extends javax.swing.JFrame {
         Counselor newC = new Counselor(
                 newID, username, pw, nameTf.getText().trim(), selectedStatus, specialisationTf.getText().trim(), contactTf.getText().trim(), emailTf.getText().trim()
         );
-        
+
         currentAdmin.manageRecord(FileHandler.userList, newC, "ADD");
         FileHandler.saveDataToFiles();
 

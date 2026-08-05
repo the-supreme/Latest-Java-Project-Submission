@@ -105,6 +105,8 @@ public class LoginFrame extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel2.setText("Username: ");
 
+        loginBtn.setBackground(new java.awt.Color(0, 0, 102));
+        loginBtn.setForeground(new java.awt.Color(255, 255, 255));
         loginBtn.setText("Login");
         loginBtn.addActionListener(this::loginBtnActionPerformed);
 
