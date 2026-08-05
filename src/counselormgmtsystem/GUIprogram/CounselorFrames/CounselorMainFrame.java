@@ -72,8 +72,6 @@ public class CounselorMainFrame extends javax.swing.JFrame {
         navItemText02 = new javax.swing.JLabel();
         navItem03 = new javax.swing.JPanel();
         navItemText03 = new javax.swing.JLabel();
-        navItem04 = new javax.swing.JPanel();
-        navItemText04 = new javax.swing.JLabel();
         contentPanel = new javax.swing.JPanel();
         counselorPageUserIcon = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -246,40 +244,6 @@ public class CounselorMainFrame extends javax.swing.JFrame {
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
-        navItem04.setBackground(new java.awt.Color(0, 0, 102));
-        navItem04.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                navItem04MouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                navItem04MouseEntered(evt);
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                navItem04MouseExited(evt);
-            }
-        });
-
-        navItemText04.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
-        navItemText04.setForeground(new java.awt.Color(255, 255, 255));
-        navItemText04.setText("Add Consultation Notes");
-
-        javax.swing.GroupLayout navItem04Layout = new javax.swing.GroupLayout(navItem04);
-        navItem04.setLayout(navItem04Layout);
-        navItem04Layout.setHorizontalGroup(
-            navItem04Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(navItem04Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addComponent(navItemText04)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        navItem04Layout.setVerticalGroup(
-            navItem04Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(navItem04Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(navItemText04)
-                .addContainerGap(22, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout sidebarPanelLayout = new javax.swing.GroupLayout(sidebarPanel);
         sidebarPanel.setLayout(sidebarPanelLayout);
         sidebarPanelLayout.setHorizontalGroup(
@@ -287,7 +251,6 @@ public class CounselorMainFrame extends javax.swing.JFrame {
             .addComponent(navItem01, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(navItem02, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(navItem03, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(navItem04, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(sidebarPanelLayout.createSequentialGroup()
                 .addComponent(profileHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -302,9 +265,7 @@ public class CounselorMainFrame extends javax.swing.JFrame {
                 .addComponent(navItem02, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(navItem03, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(navItem04, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(116, Short.MAX_VALUE))
         );
 
         contentPanel.setBackground(new java.awt.Color(255, 255, 255));
@@ -543,18 +504,6 @@ public class CounselorMainFrame extends javax.swing.JFrame {
         navItemText03.setForeground(Color.WHITE);
     }//GEN-LAST:event_navItem03MouseExited
 
-    private void navItem04MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem04MouseEntered
-        // TODO add your handling code here:
-        navItem04.setBackground(Color.orange);
-        navItemText04.setForeground(Color.BLACK);
-    }//GEN-LAST:event_navItem04MouseEntered
-
-    private void navItem04MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem04MouseExited
-        // TODO add your handling code here:
-        navItem04.setBackground(new Color(0,0,102));
-        navItemText04.setForeground(Color.WHITE);
-    }//GEN-LAST:event_navItem04MouseExited
-
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
         LoginFrame loginFrame = new LoginFrame();
         loginFrame.setLocationRelativeTo(null);
@@ -631,12 +580,6 @@ public class CounselorMainFrame extends javax.swing.JFrame {
         consultPage.setVisible(true);
     }//GEN-LAST:event_navItem03MouseClicked
 
-    private void navItem04MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem04MouseClicked
-        AddConsultationNoteFrame notePage = new AddConsultationNoteFrame(this.currentCounselor);
-        notePage.setLocationRelativeTo(null);
-        notePage.setVisible(true);
-    }//GEN-LAST:event_navItem04MouseClicked
-
     
     /**
      * @param args the command line arguments
@@ -684,11 +627,9 @@ public class CounselorMainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel navItem01;
     private javax.swing.JPanel navItem02;
     private javax.swing.JPanel navItem03;
-    private javax.swing.JPanel navItem04;
     private javax.swing.JLabel navItemText01;
     private javax.swing.JLabel navItemText02;
     private javax.swing.JLabel navItemText03;
-    private javax.swing.JLabel navItemText04;
     private javax.swing.JPanel profileHeader;
     private javax.swing.JButton saveBtn1;
     private javax.swing.JPanel sidebarPanel;

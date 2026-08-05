@@ -389,6 +389,10 @@ public class FileHandler {
             email == null || email.trim().isEmpty()) {
             return "Full Name, Contact Number, and Email are required.";
         }
+        
+        if (!name.trim().matches("^[a-zA-Z\\s]+$")) {
+            return "Name must only contain letters and spaces.";
+        }
 
         // 2. Email Format Check
         if (!email.trim().matches("^[\\w.+-]+@([\\w-]+\\.)+[a-zA-Z]{2,}$")) {

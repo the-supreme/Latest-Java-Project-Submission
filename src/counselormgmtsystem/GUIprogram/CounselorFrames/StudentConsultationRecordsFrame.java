@@ -4,47 +4,47 @@
  */
 package counselormgmtsystem.GUIprogram.CounselorFrames;
 
+import counselormgmtsystem.Appointment;
 import counselormgmtsystem.ConsultationRecords;
 import counselormgmtsystem.Counselor;
 import counselormgmtsystem.FileHandler;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author tzhen
  */
 public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(StudentConsultationRecordsFrame.class.getName());
     private Counselor currentCounselor;
+
     /**
      * Creates new form StudentConsultationRecordsFrame
      */
-   public StudentConsultationRecordsFrame(Counselor counselor) {
+    public StudentConsultationRecordsFrame(Counselor counselor) {
         this.currentCounselor = counselor;
         initComponents();
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         FileHandler fileHandler = new FileHandler();
-        
-        
+
         if (FileHandler.userList.isEmpty() && FileHandler.consultList.isEmpty()) {
             fileHandler.loadDataFromFiles();
         }
-        
-        
+
         populateTable();
-        
-        
+
         jTable1.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting() && jTable1.getSelectedRow() != -1) {
                 populateFormFromSelection();
             }
         });
-        
-        
+
         setSize(850, 540);
-        
-        
-}
+
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -57,17 +57,11 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        recordIDField = new javax.swing.JTextField();
         appointmentIDField = new javax.swing.JTextField();
-        studentIDField = new javax.swing.JTextField();
-        counselorIDField = new javax.swing.JTextField();
         dateField = new javax.swing.JTextField();
         jScrollPane4 = new javax.swing.JScrollPane();
         notesArea = new javax.swing.JTextArea();
@@ -95,54 +89,36 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Record Detail", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Record ID");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 21, 62, -1));
-
         jLabel3.setBackground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Appointment ID");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 49, -1, -1));
-
-        jLabel4.setText("Student ID");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 77, 100, -1));
-
-        jLabel5.setText("Counselor ID");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 102, 100, -1));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
 
         jLabel6.setText("Date");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(11, 136, 100, -1));
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 100, -1));
 
         jLabel7.setText("Notes");
-        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 100, -1));
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 100, -1));
 
         jLabel8.setText("Recommendations");
-        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, -1, -1));
-        jPanel2.add(recordIDField, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 80, -1));
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, -1, -1));
 
         appointmentIDField.addActionListener(this::appointmentIDFieldActionPerformed);
-        jPanel2.add(appointmentIDField, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 50, 80, -1));
-
-        studentIDField.addActionListener(this::studentIDFieldActionPerformed);
-        jPanel2.add(studentIDField, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 80, 80, -1));
-
-        counselorIDField.setText("CNS001");
-        counselorIDField.addActionListener(this::counselorIDFieldActionPerformed);
-        jPanel2.add(counselorIDField, new org.netbeans.lib.awtextra.AbsoluteConstraints(281, 110, 80, -1));
+        jPanel2.add(appointmentIDField, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 80, -1));
 
         dateField.addActionListener(this::dateFieldActionPerformed);
-        jPanel2.add(dateField, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 140, 80, -1));
+        jPanel2.add(dateField, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 70, 80, -1));
 
         notesArea.setColumns(20);
         notesArea.setRows(5);
         jScrollPane4.setViewportView(notesArea);
 
-        jPanel2.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(154, 176, 260, 100));
+        jPanel2.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 130, 260, 120));
 
         recommendationsArea.setColumns(20);
         recommendationsArea.setRows(5);
         jScrollPane5.setViewportView(recommendationsArea);
 
-        jPanel2.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(154, 286, 260, 100));
+        jPanel2.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 260, 260, 140));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -183,7 +159,7 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
 
         jPanel2.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -30, 850, 30));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 430, 410));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 430, 420));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Existing Records", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 1, 12), new java.awt.Color(0, 0, 0))); // NOI18N
@@ -269,23 +245,15 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_dateFieldActionPerformed
 
-    private void counselorIDFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_counselorIDFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_counselorIDFieldActionPerformed
-
-    private void studentIDFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_studentIDFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_studentIDFieldActionPerformed
-
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
         addRecordToTable();
-     
+
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         // TODO add your handling code here:
-       updateSelectedRecord();
+        updateSelectedRecord();
     }//GEN-LAST:event_updateButtonActionPerformed
 
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
@@ -300,10 +268,9 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    
     private void populateTable() {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); 
+        model.setRowCount(0);
 
         for (ConsultationRecords record : FileHandler.consultList) {
             model.addRow(new Object[]{record.getRecordID(), record.getStudentID(), record.getDate()});
@@ -314,112 +281,157 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow >= 0) {
             ConsultationRecords record = FileHandler.consultList.get(selectedRow);
-            recordIDField.setText(record.getRecordID());
             appointmentIDField.setText(record.getAppointmentID());
-            studentIDField.setText(record.getStudentID());
-            counselorIDField.setText(record.getCounselorID());
             dateField.setText(record.getDate());
             notesArea.setText(record.getNotes());
             recommendationsArea.setText(record.getRecommendations());
         }
     }
 
+    private String validateFormInputs(String apptID, String dateStr, String notes, String recommendations) {
+        if (apptID.isEmpty()) {
+            return "Appointment ID is required.";
+        }
+
+        // Verify that Appointment ID exists in memory
+        boolean apptExists = false;
+        for (Appointment a : FileHandler.apptList) {
+            if (a.getApptID().equalsIgnoreCase(apptID)) {
+                apptExists = true;
+                break;
+            }
+        }
+        if (!apptExists) {
+            return "Appointment ID '" + apptID + "' does not exist in the system.";
+        }
+
+        if (dateStr.isEmpty()) {
+            return "Date is required.";
+        }
+
+        try {
+            LocalDate.parse(dateStr);
+        } catch (DateTimeParseException e) {
+            return "Date must be in valid YYYY-MM-DD format (e.g. 2026-08-05).";
+        }
+
+        if (notes.isEmpty()) {
+            return "Notes field cannot be empty.";
+        }
+
+        if (recommendations.isEmpty()) {
+            return "Recommendations field cannot be empty.";
+        }
+
+        return null; // All valid!
+    }
+
+    // --- HELPER TO FIND STUDENT ID FROM APPOINTMENT ID ---
+    private String findStudentIDFromAppt(String apptID) {
+        for (Appointment a : FileHandler.apptList) {
+            if (a.getApptID().equalsIgnoreCase(apptID)) {
+                return a.getStudentID();
+            }
+        }
+        return "STD000"; // Fallback default
+    }
+
     private void addRecordToTable() {
-        if (recordIDField.getText().trim().isEmpty() || appointmentIDField.getText().trim().isEmpty()
-                || studentIDField.getText().trim().isEmpty() || counselorIDField.getText().trim().isEmpty()
-                || dateField.getText().trim().isEmpty() || notesArea.getText().trim().isEmpty()
-                || recommendationsArea.getText().trim().isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+        String apptID = appointmentIDField.getText().trim();
+        String dateStr = dateField.getText().trim();
+        String notes = notesArea.getText().trim();
+        String recs = recommendationsArea.getText().trim();
+
+        // 1. Run Sequential Validation
+        String error = validateFormInputs(apptID, dateStr, notes, recs);
+        if (error != null) {
+            JOptionPane.showMessageDialog(this, error, "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        ConsultationRecords record = new ConsultationRecords(
-                recordIDField.getText().trim(), appointmentIDField.getText().trim(),
-                studentIDField.getText().trim(), counselorIDField.getText().trim(),
-                dateField.getText().trim(), notesArea.getText().trim(), recommendationsArea.getText().trim());
+        // 2. AUTO-GENERATE RECORD ID & FETCH ASSOCIATED STUDENT ID
+        String newRecordID = FileHandler.generateUserID("REC", FileHandler.consultList, ConsultationRecords::getRecordID);
+        String studentID = findStudentIDFromAppt(apptID);
+        String counselorID = (currentCounselor != null) ? currentCounselor.getID() : "CNS001";
 
-        FileHandler fileHandler = new FileHandler();
-        record.addToConsultationList(FileHandler.consultList);
-        fileHandler.saveDataToFiles();
-        
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
-        model.addRow(new Object[]{record.getRecordID(), record.getStudentID(), record.getDate()});
-        
+        // 3. Create & Store Record
+        ConsultationRecords record = new ConsultationRecords(
+                newRecordID, apptID, studentID, counselorID, dateStr, notes, recs
+        );
+
+        FileHandler.consultList.add(record);
+        FileHandler.saveDataToFiles();
+
+        populateTable();
         clearFields();
-        javax.swing.JOptionPane.showMessageDialog(this, "Record added successfully.");
+        JOptionPane.showMessageDialog(this, "Consultation Record " + newRecordID + " added successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void updateSelectedRecord() {
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Please select a record from the table to update.");
+            JOptionPane.showMessageDialog(this, "Please select a record from the table to update.", "Selection Required", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        if (recordIDField.getText().trim().isEmpty() || appointmentIDField.getText().trim().isEmpty()
-                || studentIDField.getText().trim().isEmpty() || counselorIDField.getText().trim().isEmpty()
-                || dateField.getText().trim().isEmpty() || notesArea.getText().trim().isEmpty()
-                || recommendationsArea.getText().trim().isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Please fill in all fields before updating.");
+        String apptID = appointmentIDField.getText().trim();
+        String dateStr = dateField.getText().trim();
+        String notes = notesArea.getText().trim();
+        String recs = recommendationsArea.getText().trim();
+
+        // 1. Run Validation
+        String error = validateFormInputs(apptID, dateStr, notes, recs);
+        if (error != null) {
+            JOptionPane.showMessageDialog(this, error, "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         ConsultationRecords record = FileHandler.consultList.get(selectedRow);
-        record.setRecordID(recordIDField.getText().trim());
-        record.setAppointmentID(appointmentIDField.getText().trim());
-        record.setStudentID(studentIDField.getText().trim());
-        record.setCounselorID(counselorIDField.getText().trim());
-        record.setDate(dateField.getText().trim());
-        record.setNotes(notesArea.getText().trim());
-        record.setRecommendations(recommendationsArea.getText().trim());
+        record.setAppointmentID(apptID);
+        record.setStudentID(findStudentIDFromAppt(apptID));
+        if (currentCounselor != null) {
+            record.setCounselorID(currentCounselor.getID());
+        }
+        record.setDate(dateStr);
+        record.setNotes(notes);
+        record.setRecommendations(recs);
 
-        FileHandler fileHandler = new FileHandler();
-        fileHandler.saveDataToFiles();
-
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
-        model.setValueAt(record.getRecordID(), selectedRow, 0);
-        model.setValueAt(record.getStudentID(), selectedRow, 1);
-        model.setValueAt(record.getDate(), selectedRow, 2);
+        FileHandler.saveDataToFiles();
+        populateTable();
 
         clearFields();
-        javax.swing.JOptionPane.showMessageDialog(this, "Record updated successfully.");
+        JOptionPane.showMessageDialog(this, "Record " + record.getRecordID() + " updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void deleteSelectedRecord() {
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow == -1) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Please select a record to delete.");
+            JOptionPane.showMessageDialog(this, "Please select a record to delete.", "Selection Required", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        int confirm = javax.swing.JOptionPane.showConfirmDialog(this, 
-                "Are you sure you want to delete this consultation record?", 
-                "Confirm Deletion", javax.swing.JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete this consultation record?",
+                "Confirm Deletion", JOptionPane.YES_NO_OPTION);
 
-        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
+        if (confirm == JOptionPane.YES_OPTION) {
             FileHandler.consultList.remove(selectedRow);
-            
-            FileHandler fileHandler = new FileHandler();
-            fileHandler.saveDataToFiles();
-            
-            javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) jTable1.getModel();
-            model.removeRow(selectedRow);
-            
+            FileHandler.saveDataToFiles();
+
+            populateTable();
             clearFields();
-            javax.swing.JOptionPane.showMessageDialog(this, "Record deleted successfully.");
+            JOptionPane.showMessageDialog(this, "Record deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
     private void clearFields() {
-        recordIDField.setText("");
         appointmentIDField.setText("");
-        studentIDField.setText("");
         dateField.setText("");
         notesArea.setText("");
         recommendationsArea.setText("");
         jTable1.clearSelection();
     }
-    
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -444,15 +456,11 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
     private javax.swing.JTextField appointmentIDField;
-    private javax.swing.JTextField counselorIDField;
     private javax.swing.JTextField dateField;
     private javax.swing.JButton deleteButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -468,8 +476,6 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea notesArea;
     private javax.swing.JTextArea recommendationsArea;
-    private javax.swing.JTextField recordIDField;
-    private javax.swing.JTextField studentIDField;
     private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
 }

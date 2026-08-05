@@ -1,4 +1,5 @@
 package counselormgmtsystem.GUIprogram.AdminFrames;
+
 import counselormgmtsystem.Admin;
 import counselormgmtsystem.FileHandler;
 import counselormgmtsystem.Receptionist;
@@ -6,16 +7,16 @@ import counselormgmtsystem.User;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
- 
+
 /////****when doing code for each button, if theres a formula or wtv call a function dont straight away put it inside the gui itself
 ///input validation put in the admin class then call to gui
 
 public class adminManageRecep extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(adminManageRecep.class.getName());
     private DefaultTableModel model = new DefaultTableModel();
-    private String columnName[] = {"ID", "Full Name","Contact Number","Email","Status"};
-    
+    private String columnName[] = {"ID", "Full Name", "Contact Number", "Email", "Status"};
+
     private ArrayList<Receptionist> receptionistRefs = new ArrayList<>();
     private Receptionist selectedReceptionist = null;
     private Admin currentAdmin;
@@ -26,15 +27,14 @@ public class adminManageRecep extends javax.swing.JFrame {
         if (FileHandler.userList.isEmpty()) {
             new FileHandler().loadDataFromFiles();
         }
-        
+
         model.setColumnIdentifiers(columnName);
         initComponents();
-        statusCb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
+        statusCb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Active", "Inactive"}));
         loadReceptionists();
         this.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
     }
 
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -53,6 +53,8 @@ public class adminManageRecep extends javax.swing.JFrame {
         addBtn = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         statusCb = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        usernameTF = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         recepTable = new javax.swing.JTable();
         searchTf = new javax.swing.JTextField();
@@ -73,7 +75,7 @@ public class adminManageRecep extends javax.swing.JFrame {
         jPanel1.add(contactTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 90, 71, -1));
 
         nameTf.addActionListener(this::nameTfActionPerformed);
-        jPanel1.add(nameTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, 71, -1));
+        jPanel1.add(nameTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 20, 71, -1));
 
         emailTf.addActionListener(this::emailTfActionPerformed);
         jPanel1.add(emailTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 130, 71, -1));
@@ -91,7 +93,7 @@ public class adminManageRecep extends javax.swing.JFrame {
         jPanel1.add(deleteBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(212, 278, -1, -1));
 
         jLabel1.setText("Full Name");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 50, 76, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, 76, -1));
 
         jLabel2.setText("Contact Number");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, -1, -1));
@@ -116,6 +118,12 @@ public class adminManageRecep extends javax.swing.JFrame {
 
         statusCb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
         jPanel1.add(statusCb, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 210, -1, -1));
+
+        jLabel8.setText("Username");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 60, 76, -1));
+
+        usernameTF.addActionListener(this::usernameTFActionPerformed);
+        jPanel1.add(usernameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, 71, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(44, 85, 330, 350));
 
@@ -201,51 +209,75 @@ public class adminManageRecep extends javax.swing.JFrame {
             if (u instanceof Receptionist) {
                 Receptionist r = (Receptionist) u;
                 receptionistRefs.add(r);
-                model.addRow(new Object[]{r.getID(), r.getfullName(), r.getReceptionistNumber(), r.getReceptionistEmail(), r.getStatus()});            }
+                model.addRow(new Object[]{r.getID(), r.getfullName(), r.getReceptionistNumber(), r.getReceptionistEmail(), r.getStatus()});
+            }
         }
         clearFields();
     }
- 
+
     private void clearFields() {
         nameTf.setText("");
+        if (usernameTF != null) {
+            usernameTF.setText("");
+        }
         contactTf.setText("");
         emailTf.setText("");
         passwordTf.setText("");
-        statusCb.setSelectedIndex(0); 
+        statusCb.setSelectedIndex(0);
         recepTable.clearSelection();
         selectedReceptionist = null;
     }
 
+    private String validateInputs(String name, String username, String contact, String email, String password, boolean isNewUser, String currentID) {
+        if (name.isEmpty() || username.isEmpty() || contact.isEmpty() || email.isEmpty() || (isNewUser && password.isEmpty())) {
+            return "All fields including Username are required.";
+        }
+
+        if (username.contains(" ")) {
+            return "Username cannot contain spaces.";
+        }
+
+        for (User u : FileHandler.userList) {
+            if (!isNewUser && currentID != null && u.getID().equalsIgnoreCase(currentID)) {
+                continue; // Skip current user when editing
+            }
+            if (u.getUsername().equalsIgnoreCase(username)) {
+                return "Username '" + username + "' is already taken by another account.";
+            }
+        }
+
+        return FileHandler.validateData(name, contact, email, password, isNewUser, currentID);
+    }
+
     private void editBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editBtnActionPerformed
         if (selectedReceptionist == null) {
-                JOptionPane.showMessageDialog(this, "Please select a receptionist from the table to edit.", "No Selection", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+            JOptionPane.showMessageDialog(this, "Please select a receptionist from the table to edit.", "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-            String pw = new String(passwordTf.getPassword());
+        String pw = new String(passwordTf.getPassword());
+        String username = usernameTF.getText().trim();
 
-  
-            String errorMessage = FileHandler.validateData(nameTf.getText(), contactTf.getText(), emailTf.getText(), pw, false, selectedReceptionist.getID());
+        String errorMessage = validateInputs(nameTf.getText().trim(), username, contactTf.getText().trim(), emailTf.getText().trim(), pw, false, selectedReceptionist.getID());
+        if (errorMessage != null) {
+            JOptionPane.showMessageDialog(this, errorMessage, "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        selectedReceptionist.setUsername(username);
+        selectedReceptionist.setFullName(nameTf.getText().trim());
+        selectedReceptionist.setReceptionistNumber(contactTf.getText().trim());
+        selectedReceptionist.setReceptionistEmail(emailTf.getText().trim());
+        selectedReceptionist.setStatus(statusCb.getSelectedItem().toString());
 
-            if (errorMessage != null) {
-                JOptionPane.showMessageDialog(this, errorMessage, "Input Error", JOptionPane.WARNING_MESSAGE);
-                return; 
-            }
+        if (pw.length() > 0 && !pw.equals("passwordTf")) {
+            selectedReceptionist.setpassword(pw);
+        }
 
-            selectedReceptionist.setFullName(nameTf.getText().trim());
-            selectedReceptionist.setReceptionistNumber(contactTf.getText().trim());
-            selectedReceptionist.setReceptionistEmail(emailTf.getText().trim());
-            selectedReceptionist.setStatus(statusCb.getSelectedItem().toString()); 
-            
-            if (pw.length() > 0 && !pw.equals("passwordTf")) {
-                selectedReceptionist.setpassword(pw);
-            }
+        currentAdmin.manageRecord(FileHandler.userList, selectedReceptionist, "UPDATE");
 
-            currentAdmin.manageRecord(FileHandler.userList, selectedReceptionist, "UPDATE");
-
-            new FileHandler().saveDataToFiles();
-            JOptionPane.showMessageDialog(this, "Receptionist account updated successfully.");
-            loadReceptionists();
+        FileHandler.saveDataToFiles();
+        JOptionPane.showMessageDialog(this, "Receptionist account updated successfully.");
+        loadReceptionists();
 
     }//GEN-LAST:event_editBtnActionPerformed
 
@@ -275,32 +307,29 @@ public class adminManageRecep extends javax.swing.JFrame {
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         String pw = new String(passwordTf.getPassword());
-
-            String errorMessage = FileHandler.validateData(nameTf.getText(), contactTf.getText(), emailTf.getText(), pw, true, null);
-
-            if (errorMessage != null) {
-                JOptionPane.showMessageDialog(this, errorMessage, "Input Error", JOptionPane.WARNING_MESSAGE);
-                return; 
-            }
+        String username = usernameTF.getText().trim();
+        String errorMessage = validateInputs(nameTf.getText().trim(), username, contactTf.getText().trim(), emailTf.getText().trim(), pw, true, null);
+        if (errorMessage != null) {
+            JOptionPane.showMessageDialog(this, errorMessage, "Input Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
         String newID = FileHandler.generateUserID("REC", FileHandler.userList, User::getID);
-        String username = nameTf.getText().trim().toLowerCase().replaceAll("\\s+", ".");
-        String selectedStatus = statusCb.getSelectedItem().toString();  
-        
-        Receptionist newReceptionist = new Receptionist(
-            newID, 
-            username, 
-            new String(pw),
-            nameTf.getText().trim(), 
-            selectedStatus,
-            contactTf.getText().trim(),
-            emailTf.getText().trim()
-        );
+        String selectedStatus = statusCb.getSelectedItem().toString();
 
+        Receptionist newReceptionist = new Receptionist(
+                newID,
+                username,
+                pw,
+                nameTf.getText().trim(),
+                selectedStatus,
+                contactTf.getText().trim(),
+                emailTf.getText().trim()
+        );
         //admin method overload
         currentAdmin.manageRecord(FileHandler.userList, newReceptionist, "ADD");
 
-        new FileHandler().saveDataToFiles();
+        FileHandler.saveDataToFiles();
 
         JOptionPane.showMessageDialog(this, "Receptionist " + newID + " successfully added.");
         loadReceptionists();
@@ -320,9 +349,10 @@ public class adminManageRecep extends javax.swing.JFrame {
         String email = String.valueOf(model.getValueAt(modelRow, 3));
 
         nameTf.setText(name);
+        usernameTF.setText(selectedReceptionist.getUsername());
         contactTf.setText(contact);
         emailTf.setText(email);
-        statusCb.setSelectedItem(selectedReceptionist.getStatus()); 
+        statusCb.setSelectedItem(selectedReceptionist.getStatus());
         selectedReceptionist = receptionistRefs.get(modelRow);
     }//GEN-LAST:event_recepTableMouseReleased
 
@@ -332,7 +362,7 @@ public class adminManageRecep extends javax.swing.JFrame {
                     "No Selection", JOptionPane.WARNING_MESSAGE);
             return;
         }
- 
+
         int confirm = JOptionPane.showConfirmDialog(this,
                 "Delete receptionist \"" + selectedReceptionist.getfullName() + "\"? This cannot be undone.",
                 "Confirm Delete", JOptionPane.YES_NO_OPTION);
@@ -342,7 +372,7 @@ public class adminManageRecep extends javax.swing.JFrame {
 
         currentAdmin.manageRecord(FileHandler.userList, selectedReceptionist, "DELETE");
 
-        new FileHandler().saveDataToFiles();
+        FileHandler.saveDataToFiles();
 
         JOptionPane.showMessageDialog(this, "Receptionist account deleted.");
         loadReceptionists();
@@ -355,16 +385,22 @@ public class adminManageRecep extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
+    private void usernameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_usernameTFActionPerformed
+
     private void executeSearch(String query) {
-        if (recepTable == null) return; 
+        if (recepTable == null) {
+            return;
+        }
 
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) recepTable.getModel();
-        javax.swing.table.TableRowSorter<javax.swing.table.DefaultTableModel> sorter = 
-            new javax.swing.table.TableRowSorter<>(model);
+        javax.swing.table.TableRowSorter<javax.swing.table.DefaultTableModel> sorter
+                = new javax.swing.table.TableRowSorter<>(model);
         recepTable.setRowSorter(sorter);
 
         if (query.trim().isEmpty() || query.equals("Search...")) {
-            sorter.setRowFilter(null); 
+            sorter.setRowFilter(null);
         } else {
             sorter.setRowFilter(javax.swing.RowFilter.regexFilter("(?i)" + query));
         }
@@ -384,12 +420,7 @@ public class adminManageRecep extends javax.swing.JFrame {
             System.out.println("Warning: Data load failed, starting with empty state: " + e.getMessage());
         }
 
-        java.awt.EventQueue.invokeLater(() -> {
-            Admin mockupAdmin = new Admin("ADM000", "admin", "admin123", "System Admin", "012-3456789", "admin@apu.edu.my", "Room 4.2");
-            new adminManageRecep(mockupAdmin).setVisible(true);
-        });
-
-}
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addBtn;
@@ -405,6 +436,7 @@ public class adminManageRecep extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -415,6 +447,7 @@ public class adminManageRecep extends javax.swing.JFrame {
     private javax.swing.JButton searchBtn;
     private javax.swing.JTextField searchTf;
     private javax.swing.JComboBox<String> statusCb;
+    private javax.swing.JTextField usernameTF;
     // End of variables declaration//GEN-END:variables
 
 }

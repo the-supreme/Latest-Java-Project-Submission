@@ -50,6 +50,9 @@ public class adminManageCounselor extends javax.swing.JFrame {
 
     private void clearFields() {
         nameTf.setText("");
+        if (usernameTF != null) {
+            usernameTF.setText("");
+        }
         contactTf.setText("");
         emailTf.setText("");
         specialisationTf.setText("");
@@ -57,6 +60,31 @@ public class adminManageCounselor extends javax.swing.JFrame {
         statusCb.setSelectedIndex(0);
         recepTable.clearSelection();
         selectedCounselor = null;
+    }
+
+    private String validateInputs(String name, String username, String contact, String email, String password, boolean isNewUser, String currentID) {
+        // [UPDATED] Mandatory presence check
+        if (name.isEmpty() || username.isEmpty() || contact.isEmpty() || email.isEmpty() || (isNewUser && password.isEmpty())) {
+            return "All fields including Username are required.";
+        }
+
+        // [UPDATED] Check for spaces in username
+        if (username.contains(" ")) {
+            return "Username cannot contain spaces.";
+        }
+
+        // [UPDATED] Duplicate username check across all users in userList
+        for (User u : FileHandler.userList) {
+            if (!isNewUser && currentID != null && u.getID().equalsIgnoreCase(currentID)) {
+                continue; // Skip current user when editing
+            }
+            if (u.getUsername().equalsIgnoreCase(username)) {
+                return "Username '" + username + "' is already taken by another account.";
+            }
+        }
+
+        // [UPDATED] Pass to standard FileHandler validation for email, phone, and password rules
+        return FileHandler.validateData(name, contact, email, password, isNewUser, currentID);
     }
 
     private void applyFilters() {
@@ -100,6 +128,8 @@ public class adminManageCounselor extends javax.swing.JFrame {
         specialisationTf = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         statusCb = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
+        usernameTF = new javax.swing.JTextField();
         backBtn = new javax.swing.JButton();
         cfTf = new javax.swing.JButton();
 
@@ -163,7 +193,7 @@ public class adminManageCounselor extends javax.swing.JFrame {
         jPanel1.add(contactTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(223, 79, 71, -1));
 
         nameTf.addActionListener(this::nameTfActionPerformed);
-        jPanel1.add(nameTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(223, 45, 71, -1));
+        jPanel1.add(nameTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 20, 71, -1));
 
         emailTf.addActionListener(this::emailTfActionPerformed);
         jPanel1.add(emailTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(223, 113, 71, -1));
@@ -181,7 +211,7 @@ public class adminManageCounselor extends javax.swing.JFrame {
         jPanel1.add(deleteBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 280, -1, -1));
 
         jLabel1.setText("Full Name");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(67, 48, 76, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 20, 76, -1));
 
         jLabel2.setText("Contact Number");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(67, 82, -1, -1));
@@ -212,6 +242,12 @@ public class adminManageCounselor extends javax.swing.JFrame {
 
         statusCb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active ", "Inactive" }));
         jPanel1.add(statusCb, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 220, -1, -1));
+
+        jLabel9.setText("Username");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 50, 76, -1));
+
+        usernameTF.addActionListener(this::usernameTFActionPerformed);
+        jPanel1.add(usernameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 50, 71, -1));
 
         backBtn.setText("Back");
         backBtn.addActionListener(this::backBtnActionPerformed);
@@ -284,13 +320,13 @@ public class adminManageCounselor extends javax.swing.JFrame {
         }
 
         String pw = new String(passwordTf.getPassword());
-
-        String errorMessage = FileHandler.validateData(nameTf.getText(), contactTf.getText(), emailTf.getText(), pw, false, selectedCounselor.getID());
+        String username = usernameTF.getText().trim();
+        String errorMessage = validateInputs(nameTf.getText().trim(), username, contactTf.getText().trim(), emailTf.getText().trim(), pw, false, selectedCounselor.getID());
         if (errorMessage != null) {
             JOptionPane.showMessageDialog(this, errorMessage, "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
+        selectedCounselor.setUsername(username);
         selectedCounselor.setFullName(nameTf.getText().trim());
         selectedCounselor.setContactNumber(contactTf.getText().trim());
         selectedCounselor.setEmail(emailTf.getText().trim());
@@ -302,7 +338,7 @@ public class adminManageCounselor extends javax.swing.JFrame {
         }
 
         currentAdmin.manageRecord(FileHandler.userList, selectedCounselor, "UPDATE");
-        new FileHandler().saveDataToFiles();
+        FileHandler.saveDataToFiles();
 
         JOptionPane.showMessageDialog(this, "Counselor account updated successfully.");
         loadCounselors();
@@ -337,25 +373,23 @@ public class adminManageCounselor extends javax.swing.JFrame {
 
     private void addBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addBtnActionPerformed
         String pw = new String(passwordTf.getPassword());
-
+        String username = usernameTF.getText().trim();
         //validate
-        String errorMessage = FileHandler.validateData(nameTf.getText(), contactTf.getText(), emailTf.getText(), pw, true, null);
+        String errorMessage = validateInputs(nameTf.getText().trim(), username, contactTf.getText().trim(), emailTf.getText().trim(), pw, true, null);
         if (errorMessage != null) {
             JOptionPane.showMessageDialog(this, errorMessage, "Input Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         //generate data
         String newID = FileHandler.generateUserID("CNS", FileHandler.userList, User::getID);
-        String username = nameTf.getText().trim().toLowerCase().replaceAll("\\s+", ".");
         String selectedStatus = statusCb.getSelectedItem().toString();
 
         Counselor newC = new Counselor(
                 newID, username, pw, nameTf.getText().trim(), selectedStatus, specialisationTf.getText().trim(), contactTf.getText().trim(), emailTf.getText().trim()
         );
-
+        
         currentAdmin.manageRecord(FileHandler.userList, newC, "ADD");
-        new FileHandler().saveDataToFiles();
+        FileHandler.saveDataToFiles();
 
         JOptionPane.showMessageDialog(this, "Counselor " + newID + " successfully added.");
         loadCounselors();
@@ -379,6 +413,7 @@ public class adminManageCounselor extends javax.swing.JFrame {
         selectedCounselor = counselorRefs.get(modelRow);
 
         nameTf.setText(selectedCounselor.getfullName());
+        usernameTF.setText(selectedCounselor.getUsername());
         contactTf.setText(selectedCounselor.getContactNumber());
         emailTf.setText(selectedCounselor.getEmail());
         specialisationTf.setText(selectedCounselor.getSpecialization());
@@ -409,6 +444,10 @@ public class adminManageCounselor extends javax.swing.JFrame {
         feedbackPage.setVisible(true);
         this.dispose();    }//GEN-LAST:event_cfTfActionPerformed
 
+    private void usernameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_usernameTFActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -435,6 +474,7 @@ public class adminManageCounselor extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -446,5 +486,6 @@ public class adminManageCounselor extends javax.swing.JFrame {
     private javax.swing.JTextField searchTf;
     private javax.swing.JTextField specialisationTf;
     private javax.swing.JComboBox<String> statusCb;
+    private javax.swing.JTextField usernameTF;
     // End of variables declaration//GEN-END:variables
 }
