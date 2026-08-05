@@ -2,9 +2,9 @@ ADM001|sarah_admin|admin123|Sarah Jenkins|Active
 ADM002|david_boss|mgmPass9|David Miller|Active
 ADM003|evelyn_c|adminPass3|Evelyn Choo|Active
 ADM004|faizal_a|adminPass4|Faizal Ahmed|Active
-CNS001|dr_anand|cnsPass1|Dr. Anand Raj|Inactive
-CNS002|clara_wong|cnsPass2|Clara Wong|Active
-REC001|kumar_dagoat|recPass1|Kumar Anbalagan|Active
+CNS001|dr_anand|cnsPass1|Anand Raj|Active
+CNS002|clara_wng|cnsPass2|Clara Wong|Active
+REC001|kumar_dagoat|recPass1|Kumar Anbalagananan|Active
 STD001|alex_lee|stdPass1|Alex Lee Jia Earn|Active
 STD003|ryan_tan|stdPass3|Ryan Tan Meng|Active
 STD004|meera_nair|stdPass4|Meera Nair|Active
@@ -13,3 +13,5 @@ STD005|sow_serene12|s2r2n3@123|Sow Serene|Active
 STD006|abu|abubakar|Abu|Active
 REC003|ali|ali@01933|ali|Active
 CNS003|abubakar|0987654321|Abubakar|Active
+STD007|adsofi|adfa1983|akdsjf|Active
+STD008|ali_31123|asalkjdf|Ali|Active

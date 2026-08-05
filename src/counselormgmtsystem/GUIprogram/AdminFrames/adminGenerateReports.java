@@ -69,7 +69,7 @@ public class adminGenerateReports extends javax.swing.JFrame {
             jPanel15.setVisible(true);
             jPanel14.setVisible(true);
 
-            model.setColumnIdentifiers(new String[]{"Appt ID", "Student ID", "Counselor ID", "Date", "Time", "Type", "Queue", "Status"});
+            model.setColumnIdentifiers(new String[]{"Appt ID", "Student ID", "Counselor ID", "Date", "Start Time", "End Time", "Booking Type", "Queue Number", "Status"});
 
         } else if (category.equals("Counselor Workload")) {
             jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Total Counselors"));
@@ -239,8 +239,8 @@ public class adminGenerateReports extends javax.swing.JFrame {
         yearTf.addActionListener(this::yearTfActionPerformed);
         jPanel1.add(yearTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(428, 24, 53, -1));
 
-        jLabel3.setText("Month/Q/Date:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(499, 27, 89, -1));
+        jLabel3.setText("<html>Month/Q/Date (mm-dd):<html>");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 20, 89, -1));
 
         dateTf.addActionListener(this::dateTfActionPerformed);
         jPanel1.add(dateTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(594, 24, 71, -1));
@@ -489,11 +489,6 @@ public class adminGenerateReports extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-
-        java.awt.EventQueue.invokeLater(() -> {
-            Admin mockupAdmin = new Admin("ADM000", "admin", "admin123", "System Admin", "012-3456789", "admin@apu.edu.my", "Room 4.2");
-            new adminGenerateReports(mockupAdmin).setVisible(true);
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

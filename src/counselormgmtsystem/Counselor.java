@@ -10,9 +10,9 @@ package counselormgmtsystem;
  */
 
 public class Counselor extends User {
-    String specialization;
-    String contactNumber;
-    String email;
+    protected String specialization;
+    protected String contactNumber;
+    protected String email;
 
 
     public Counselor(String ID, String username, String password, String fullName, String status, String specialization, String contactNumber, String email) {

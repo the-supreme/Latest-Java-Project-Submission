@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/////****when doing code for each button, if theres a formula or wtv call a function dont straight away put it inside the gui itself
-///input validation put in the admin class then call to gui
-
 public class adminManageRecep extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(adminManageRecep.class.getName());
@@ -150,6 +147,7 @@ public class adminManageRecep extends javax.swing.JFrame {
         searchBtn.addActionListener(this::searchBtnActionPerformed);
         getContentPane().add(searchBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 90, -1, -1));
 
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("Filter Receptionists (Name, Contact Number & Email):");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 70, 332, -1));
 

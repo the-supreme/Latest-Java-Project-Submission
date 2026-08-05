@@ -8,8 +8,8 @@ import counselormgmtsystem.Appointment;
 import counselormgmtsystem.ConsultationRecords;
 import counselormgmtsystem.Counselor;
 import counselormgmtsystem.FileHandler;
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -34,6 +34,7 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
             fileHandler.loadDataFromFiles();
         }
 
+        populateDateComboBox();
         populateTable();
 
         jTable1.getSelectionModel().addListSelectionListener(e -> {
@@ -44,6 +45,58 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
 
         setSize(850, 540);
 
+    }
+
+    private void populateDateComboBox() {
+        if (dateComboBox == null) {
+            return;
+        }
+        dateComboBox.removeAllItems();
+
+        List<String> uniqueDates = new ArrayList<>();
+
+        if (currentCounselor != null && FileHandler.apptList != null) {
+            for (Appointment appt : FileHandler.apptList) {
+                if (appt.getCounselorID() != null
+                        && appt.getCounselorID().equalsIgnoreCase(currentCounselor.getID())
+                        && !appt.getStatus().equalsIgnoreCase("Cancelled")) {
+
+                    if (!uniqueDates.contains(appt.getDate())) {
+                        uniqueDates.add(appt.getDate());
+                        dateComboBox.addItem(appt.getDate());
+                    }
+                }
+            }
+        }
+
+        if (dateComboBox.getItemCount() > 0) {
+            dateComboBox.setSelectedIndex(0);
+            updateApptIDComboBox(); // Auto-populate appointment IDs for the first date
+        }
+    }
+
+    private void updateApptIDComboBox() {
+        if (apptIDComboBox == null || dateComboBox == null || dateComboBox.getSelectedItem() == null) {
+            if (apptIDComboBox != null) {
+                apptIDComboBox.removeAllItems();
+            }
+            return;
+        }
+
+        String selectedDate = (String) dateComboBox.getSelectedItem();
+        apptIDComboBox.removeAllItems();
+
+        if (currentCounselor != null && FileHandler.apptList != null) {
+            for (Appointment appt : FileHandler.apptList) {
+                if (appt.getCounselorID() != null
+                        && appt.getCounselorID().equalsIgnoreCase(currentCounselor.getID())
+                        && appt.getDate().equals(selectedDate)
+                        && !appt.getStatus().equalsIgnoreCase("Cancelled")) {
+
+                    apptIDComboBox.addItem(appt.getApptID());
+                }
+            }
+        }
     }
 
     /**
@@ -61,8 +114,6 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        appointmentIDField = new javax.swing.JTextField();
-        dateField = new javax.swing.JTextField();
         jScrollPane4 = new javax.swing.JScrollPane();
         notesArea = new javax.swing.JTextArea();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -70,6 +121,8 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
+        apptIDComboBox = new javax.swing.JComboBox<>();
+        dateComboBox = new javax.swing.JComboBox<>();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -91,22 +144,16 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
 
         jLabel3.setBackground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Appointment ID");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, -1, -1));
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
 
         jLabel6.setText("Date");
-        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 100, -1));
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 100, -1));
 
         jLabel7.setText("Notes");
         jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 100, -1));
 
         jLabel8.setText("Recommendations");
         jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, -1, -1));
-
-        appointmentIDField.addActionListener(this::appointmentIDFieldActionPerformed);
-        jPanel2.add(appointmentIDField, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 20, 80, -1));
-
-        dateField.addActionListener(this::dateFieldActionPerformed);
-        jPanel2.add(dateField, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 70, 80, -1));
 
         notesArea.setColumns(20);
         notesArea.setRows(5);
@@ -158,6 +205,13 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
         );
 
         jPanel2.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, -30, 850, 30));
+
+        apptIDComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jPanel2.add(apptIDComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 80, 140, -1));
+
+        dateComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        dateComboBox.addActionListener(this::dateComboBoxActionPerformed);
+        jPanel2.add(dateComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 140, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 430, 420));
 
@@ -241,10 +295,6 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void dateFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dateFieldActionPerformed
-
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
         // TODO add your handling code here:
         addRecordToTable();
@@ -261,9 +311,9 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
         deleteSelectedRecord();
     }//GEN-LAST:event_deleteButtonActionPerformed
 
-    private void appointmentIDFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_appointmentIDFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_appointmentIDFieldActionPerformed
+    private void dateComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dateComboBoxActionPerformed
+        updateApptIDComboBox();
+    }//GEN-LAST:event_dateComboBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -273,57 +323,34 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
         model.setRowCount(0);
 
         for (ConsultationRecords record : FileHandler.consultList) {
-            model.addRow(new Object[]{record.getRecordID(), record.getStudentID(), record.getDate()});
+            // Show records logged by this counselor
+            if (currentCounselor != null && record.getCounselorID().equalsIgnoreCase(currentCounselor.getID())) {
+                model.addRow(new Object[]{record.getRecordID(), record.getStudentID(), record.getDate()});
+            }
         }
     }
 
     private void populateFormFromSelection() {
         int selectedRow = jTable1.getSelectedRow();
         if (selectedRow >= 0) {
-            ConsultationRecords record = FileHandler.consultList.get(selectedRow);
-            appointmentIDField.setText(record.getAppointmentID());
-            dateField.setText(record.getDate());
-            notesArea.setText(record.getNotes());
-            recommendationsArea.setText(record.getRecommendations());
-        }
-    }
+            String recordID = (String) jTable1.getValueAt(selectedRow, 0);
 
-    private String validateFormInputs(String apptID, String dateStr, String notes, String recommendations) {
-        if (apptID.isEmpty()) {
-            return "Appointment ID is required.";
-        }
-
-        // Verify that Appointment ID exists in memory
-        boolean apptExists = false;
-        for (Appointment a : FileHandler.apptList) {
-            if (a.getApptID().equalsIgnoreCase(apptID)) {
-                apptExists = true;
-                break;
+            for (ConsultationRecords record : FileHandler.consultList) {
+                if (record.getRecordID().equals(recordID)) {
+                    // Match and select Date
+                    if (dateComboBox != null) {
+                        dateComboBox.setSelectedItem(record.getDate());
+                    }
+                    // Match and select Appt ID
+                    if (apptIDComboBox != null) {
+                        apptIDComboBox.setSelectedItem(record.getAppointmentID());
+                    }
+                    notesArea.setText(record.getNotes());
+                    recommendationsArea.setText(record.getRecommendations());
+                    break;
+                }
             }
         }
-        if (!apptExists) {
-            return "Appointment ID '" + apptID + "' does not exist in the system.";
-        }
-
-        if (dateStr.isEmpty()) {
-            return "Date is required.";
-        }
-
-        try {
-            LocalDate.parse(dateStr);
-        } catch (DateTimeParseException e) {
-            return "Date must be in valid YYYY-MM-DD format (e.g. 2026-08-05).";
-        }
-
-        if (notes.isEmpty()) {
-            return "Notes field cannot be empty.";
-        }
-
-        if (recommendations.isEmpty()) {
-            return "Recommendations field cannot be empty.";
-        }
-
-        return null; // All valid!
     }
 
     // --- HELPER TO FIND STUDENT ID FROM APPOINTMENT ID ---
@@ -337,24 +364,26 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
     }
 
     private void addRecordToTable() {
-        String apptID = appointmentIDField.getText().trim();
-        String dateStr = dateField.getText().trim();
-        String notes = notesArea.getText().trim();
-        String recs = recommendationsArea.getText().trim();
-
-        // 1. Run Sequential Validation
-        String error = validateFormInputs(apptID, dateStr, notes, recs);
-        if (error != null) {
-            JOptionPane.showMessageDialog(this, error, "Validation Error", JOptionPane.WARNING_MESSAGE);
+        if (dateComboBox.getSelectedItem() == null || apptIDComboBox.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "Please select a valid Date and Appointment ID.", "Selection Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // 2. AUTO-GENERATE RECORD ID & FETCH ASSOCIATED STUDENT ID
+        String apptID = (String) apptIDComboBox.getSelectedItem();
+        String dateStr = (String) dateComboBox.getSelectedItem();
+        String notes = notesArea.getText().trim();
+        String recs = recommendationsArea.getText().trim();
+
+        if (notes.isEmpty() || recs.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Notes and Recommendations cannot be empty.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Auto-generate Record ID
         String newRecordID = FileHandler.generateUserID("REC", FileHandler.consultList, ConsultationRecords::getRecordID);
         String studentID = findStudentIDFromAppt(apptID);
         String counselorID = (currentCounselor != null) ? currentCounselor.getID() : "CNS001";
 
-        // 3. Create & Store Record
         ConsultationRecords record = new ConsultationRecords(
                 newRecordID, apptID, studentID, counselorID, dateStr, notes, recs
         );
@@ -374,33 +403,37 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
             return;
         }
 
-        String apptID = appointmentIDField.getText().trim();
-        String dateStr = dateField.getText().trim();
-        String notes = notesArea.getText().trim();
-        String recs = recommendationsArea.getText().trim();
-
-        // 1. Run Validation
-        String error = validateFormInputs(apptID, dateStr, notes, recs);
-        if (error != null) {
-            JOptionPane.showMessageDialog(this, error, "Validation Error", JOptionPane.WARNING_MESSAGE);
+        if (dateComboBox.getSelectedItem() == null || apptIDComboBox.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "Please select a valid Date and Appointment ID.", "Selection Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        ConsultationRecords record = FileHandler.consultList.get(selectedRow);
-        record.setAppointmentID(apptID);
-        record.setStudentID(findStudentIDFromAppt(apptID));
-        if (currentCounselor != null) {
-            record.setCounselorID(currentCounselor.getID());
+        String recordID = (String) jTable1.getValueAt(selectedRow, 0);
+        String apptID = (String) apptIDComboBox.getSelectedItem();
+        String dateStr = (String) dateComboBox.getSelectedItem();
+        String notes = notesArea.getText().trim();
+        String recs = recommendationsArea.getText().trim();
+
+        if (notes.isEmpty() || recs.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Notes and Recommendations cannot be empty.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return;
         }
-        record.setDate(dateStr);
-        record.setNotes(notes);
-        record.setRecommendations(recs);
+
+        for (ConsultationRecords record : FileHandler.consultList) {
+            if (record.getRecordID().equals(recordID)) {
+                record.setAppointmentID(apptID);
+                record.setStudentID(findStudentIDFromAppt(apptID));
+                record.setDate(dateStr);
+                record.setNotes(notes);
+                record.setRecommendations(recs);
+                break;
+            }
+        }
 
         FileHandler.saveDataToFiles();
         populateTable();
-
         clearFields();
-        JOptionPane.showMessageDialog(this, "Record " + record.getRecordID() + " updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Record updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void deleteSelectedRecord() {
@@ -425,8 +458,9 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
     }
 
     private void clearFields() {
-        appointmentIDField.setText("");
-        dateField.setText("");
+        if (dateComboBox.getItemCount() > 0) {
+            dateComboBox.setSelectedIndex(0);
+        }
         notesArea.setText("");
         recommendationsArea.setText("");
         jTable1.clearSelection();
@@ -455,8 +489,8 @@ public class StudentConsultationRecordsFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addButton;
-    private javax.swing.JTextField appointmentIDField;
-    private javax.swing.JTextField dateField;
+    private javax.swing.JComboBox<String> apptIDComboBox;
+    private javax.swing.JComboBox<String> dateComboBox;
     private javax.swing.JButton deleteButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;

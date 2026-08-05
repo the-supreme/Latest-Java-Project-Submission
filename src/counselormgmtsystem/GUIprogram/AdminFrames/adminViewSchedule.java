@@ -12,7 +12,7 @@ public class adminViewSchedule extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(adminViewSchedule.class.getName());
     private DefaultTableModel model = new DefaultTableModel();
-    private String[] columnName = new String[]{"Appointment ID", "Student ID", "Counselor ID", "Date", "Time", "Booking Type", "Queue No", "Status"};
+    private String[] columnName = new String[]{"Appointment ID", "Student ID", "Counselor ID", "Date", "Start Time", "End Time", "Booking Type", "Queue Number", "Status"};
 
     private ArrayList<Appointment> appointmentRefs = new ArrayList<>();
     private Appointment selectedSchedule = null;
@@ -62,8 +62,6 @@ public class adminViewSchedule extends javax.swing.JFrame {
         jLayeredPane1 = new javax.swing.JLayeredPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         scheduleTable = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        cancelBtn = new javax.swing.JButton();
         backBtn = new javax.swing.JButton();
         counselorTf = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -96,13 +94,6 @@ public class adminViewSchedule extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 150, 940, 390));
 
-        jLabel1.setText("Select Appointment to Cancel:");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 80, 205, -1));
-
-        cancelBtn.setText("Cancel");
-        cancelBtn.addActionListener(this::cancelBtnActionPerformed);
-        getContentPane().add(cancelBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 100, -1, -1));
-
         backBtn.setText("Back");
         backBtn.addActionListener(this::backBtnActionPerformed);
         getContentPane().add(backBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 100, -1, -1));
@@ -110,7 +101,7 @@ public class adminViewSchedule extends javax.swing.JFrame {
         counselorTf.addActionListener(this::counselorTfActionPerformed);
         getContentPane().add(counselorTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 177, -1));
 
-        jLabel2.setText("Filter by CounselorID:");
+        jLabel2.setText("Filter:");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 205, -1));
 
         counselorBtn.setText("Filter");
@@ -144,29 +135,6 @@ public class adminViewSchedule extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void cancelBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelBtnActionPerformed
-        if (selectedSchedule == null) {
-            JOptionPane.showMessageDialog(this, "Please select an appointment from the table to cancel.", "No Selection", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        int confirm = JOptionPane.showConfirmDialog(this,
-                "Are you sure you want to cancel Appointment " + selectedSchedule.getApptID() + "?",
-                "Confirm Cancel", JOptionPane.YES_NO_OPTION);
-
-        if (confirm == JOptionPane.YES_OPTION) {
-            String errorMessage = currentAdmin.cancelAppointment(selectedSchedule);
-
-            if (errorMessage != null) {
-                //alr cancelled or smth went wrongg
-                JOptionPane.showMessageDialog(this, errorMessage, "Info", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                loadSchedules();
-                JOptionPane.showMessageDialog(this, "Appointment cancelled successfully. The Roster slot is now Available again.");
-            }
-        }
-    }//GEN-LAST:event_cancelBtnActionPerformed
 
     private void counselorTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_counselorTfActionPerformed
         counselorBtnActionPerformed(evt);
@@ -215,19 +183,12 @@ public class adminViewSchedule extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println("Warning: Data load failed: " + e.getMessage());
         }
-        //**dummy admin, delete ltr
-        java.awt.EventQueue.invokeLater(() -> {
-            Admin mockupAdmin = new Admin("ADM000", "admin", "admin123", "System Admin", "012-3456789", "admin@apu.edu.my", "Room 4.2");
-            new adminViewSchedule(mockupAdmin).setVisible(true);
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
-    private javax.swing.JButton cancelBtn;
     private javax.swing.JButton counselorBtn;
     private javax.swing.JTextField counselorTf;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLayeredPane jLayeredPane1;

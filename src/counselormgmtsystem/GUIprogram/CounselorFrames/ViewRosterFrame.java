@@ -110,13 +110,13 @@ public class ViewRosterFrame extends javax.swing.JFrame {
 
         rosterTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Roster ID", "Counselor ID", "Date", "Start Time", "End Time", "Status"
+                "Roster ID", "Counselor ID", "Date", "Start Time", "End Time"
             }
         ));
         jScrollPane1.setViewportView(rosterTable);

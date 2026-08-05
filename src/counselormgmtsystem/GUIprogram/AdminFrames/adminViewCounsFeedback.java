@@ -136,7 +136,7 @@ public class adminViewCounsFeedback extends javax.swing.JFrame {
         });
         jPanel1.add(searchTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 269, -1));
 
-        jLabel6.setText("Filter Counselors (Name, Contact Number & Email):");
+        jLabel6.setText("Filter:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 332, -1));
 
         searchBtn.setText("Search");

@@ -81,7 +81,7 @@ public class adminManageRoster extends javax.swing.JFrame {
         searchBtn.addActionListener(this::searchBtnActionPerformed);
         getContentPane().add(searchBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 80, -1, -1));
 
-        jLabel6.setText("Filter by CounselorID:");
+        jLabel6.setText("General Filter:");
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 60, 132, -1));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -111,13 +111,13 @@ public class adminManageRoster extends javax.swing.JFrame {
         jLabel1.setText("Counselor ID");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 42, 76, -1));
 
-        jLabel2.setText("Date");
+        jLabel2.setText("Date (YY-MM-DD)");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 82, -1, -1));
 
-        jLabel3.setText("Start Time");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 122, 77, -1));
+        jLabel3.setText("Start Time (24HRS)");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 122, 130, -1));
 
-        jLabel4.setText("End Time");
+        jLabel4.setText("End Time (24HRS)");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 162, -1, -1));
 
         addBtn.setBackground(new java.awt.Color(0, 0, 102));

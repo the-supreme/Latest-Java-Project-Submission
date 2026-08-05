@@ -10,7 +10,7 @@ public class adminApptHistory extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(adminApptHistory.class.getName());
     
     private DefaultTableModel model = new DefaultTableModel();
-    private String[] columnName = new String[]{"Appointment ID", "Student ID", "Counselor ID", "Date", "Time", "Booking Type", "Queue No"};
+    private String[] columnName = new String[]{"Appointment ID", "Student ID", "Counselor ID", "Date", "Start Time", "End Time", "Booking Type", "Queue Number"};
     
     private Admin currentAdmin;
     
@@ -198,11 +198,6 @@ public class adminApptHistory extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println("Warning: Data load failed: " + e.getMessage());
         }
-
-        java.awt.EventQueue.invokeLater(() -> {
-            Admin mockupAdmin = new Admin("ADM000", "admin", "admin123", "System Admin", "012-3456789", "admin@apu.edu.my", "Room 4.2");
-            new adminApptHistory(mockupAdmin).setVisible(true);
-        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

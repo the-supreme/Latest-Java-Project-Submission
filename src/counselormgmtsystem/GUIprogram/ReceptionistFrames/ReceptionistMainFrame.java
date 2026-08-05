@@ -37,7 +37,8 @@ import javax.swing.JOptionPane;
         saveBtn.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/diskette.png")).getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH)));        
         userIcon.setIcon(new ImageIcon(resizedUserImage));
         logoutButton.setIcon(new ImageIcon(new javax.swing.ImageIcon(getClass().getResource("/images/log-out.png")).getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));        
-        
+        receptionistUserIcon.setIcon(new ImageIcon(originalUserIcon.getImage().getScaledInstance(140, 140, Image.SCALE_SMOOTH)));
+
         this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
@@ -73,7 +74,7 @@ import javax.swing.JOptionPane;
         jTextField2 = new javax.swing.JTextField();
         contentPanel = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        adminPageUserIcon1 = new javax.swing.JLabel();
+        receptionistUserIcon = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         EmailTF = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
@@ -156,9 +157,9 @@ import javax.swing.JOptionPane;
         jLabel7.setText("Personal Information");
         contentPanel.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 40, -1, -1));
 
-        adminPageUserIcon1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/user (1).png"))); // NOI18N
-        adminPageUserIcon1.setText("jLabel1");
-        contentPanel.add(adminPageUserIcon1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, 150, 160));
+        receptionistUserIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/user (1).png"))); // NOI18N
+        receptionistUserIcon.setText("jLabel1");
+        contentPanel.add(receptionistUserIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, 150, 160));
 
         jLabel8.setFont(new java.awt.Font("Liberation Sans", 1, 15)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(0, 0, 0));
@@ -363,7 +364,7 @@ import javax.swing.JOptionPane;
     }// </editor-fold>//GEN-END:initComponents
 
     private void setEditMode(boolean enable) {
-        // Enable/Disable Text Fields
+        //Enable/Disable Text Fields
         FNTF.setEditable(enable);
         UNTF.setEditable(enable);
         EmailTF.setEditable(enable);
@@ -375,7 +376,6 @@ import javax.swing.JOptionPane;
     }
     
     private void navItem01MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_navItem01MouseEntered
-        // TODO add your handling code here:
         navItem01.setBackground(Color.orange);
         navItemText01.setForeground(Color.BLACK);
         
@@ -529,7 +529,6 @@ import javax.swing.JOptionPane;
     private javax.swing.JTextField FNTF;
     private javax.swing.JTextField UNTF;
     private javax.swing.JLabel adminPageUserIcon;
-    private javax.swing.JLabel adminPageUserIcon1;
     private javax.swing.JPanel contentPanel;
     private javax.swing.JButton editBtn;
     private javax.swing.Box.Filler filler2;
@@ -555,6 +554,7 @@ import javax.swing.JOptionPane;
     private javax.swing.JLabel navItemText01;
     private javax.swing.JLabel navItemText02;
     private javax.swing.JPanel profileHeader;
+    private javax.swing.JLabel receptionistUserIcon;
     private javax.swing.JButton saveBtn;
     private javax.swing.JPanel sidebarPanel;
     private javax.swing.JLabel userIcon;

@@ -53,38 +53,8 @@ public class Admin extends User {
         this.officeRoom = officeRoom;
     }
 
-    // --- ID GENERATION METHODS ---
-//    public String generateNextReceptionistID() {
-//        int max = 0;
-//        for (User u : FileHandler.userList) {
-//            if (u instanceof Receptionist && u.ID != null && u.ID.startsWith("REC")) {
-//                try {
-//                    int num = Integer.parseInt(u.ID.substring(3));
-//                    if (num > max) {
-//                        max = num;
-//                    }
-//                } catch (NumberFormatException ignored) {}
-//            }
-//        }
-//        return String.format("REC%03d", max + 1);
-//    }
-//
-//    public String generateNextCounselorID() {
-//        int max = 0;
-//        for (User u : FileHandler.userList) {
-//            if (u instanceof Counselor && u.ID != null && u.ID.startsWith("CNS")) {
-//                try {
-//                    int num = Integer.parseInt(u.ID.substring(3));
-//                    if (num > max) {
-//                        max = num;
-//                    }
-//                } catch (NumberFormatException ignored) {}
-//            }
-//        }
-//        return String.format("CNS%03d", max + 1);
-//    }
 
-    // --- OVERLOAD 1: MANAGE USERS ---
+//manage users
     public void manageRecord(ArrayList<User> userList, User targetUser, String action) {
         if (userList == null || targetUser == null || action == null) {
             System.out.println("Error: invalid arguments supplied to manageRecord().");
@@ -185,7 +155,6 @@ public class Admin extends User {
         new FileHandler().saveDataToFiles(); 
     }
     
-    // --- VALIDATION METHOD FOR ROSTER CREATION/EDITING ---
     public String validateData(String counselorId, String dateStr, String startStr, String endStr, String currentRosterId) {
         if (counselorId.trim().isEmpty() || dateStr.trim().isEmpty() || startStr.trim().isEmpty() || endStr.trim().isEmpty()) {
             return "Counselor ID, Date, Start Time and End Time are required.";
@@ -473,21 +442,6 @@ public class Admin extends User {
         }
     }
 
-    // --- APPOINTMENT CANCELLATION ---
-    public String cancelAppointment(Appointment appt) {
-        if (appt == null) {
-            return "No appointment selected.";
-        }
-
-        if (appt.getStatus().equalsIgnoreCase("Cancelled")) {
-            return "This appointment is already cancelled.";
-        }
-
-        appt.setStatus("Cancelled");
-
-        FileHandler.saveDataToFiles();
-        return null;
-    }
 
     @Override
     public String toString() {

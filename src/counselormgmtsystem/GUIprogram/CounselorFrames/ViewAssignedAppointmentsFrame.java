@@ -1,3 +1,4 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -16,11 +17,12 @@ public class ViewAssignedAppointmentsFrame extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ViewAssignedAppointmentsFrame.class.getName());
     private Counselor currentCounselor;
+
     /**
      * Creates new form ViewAssignedAppointmentsFrame
      */
     public ViewAssignedAppointmentsFrame(Counselor counselor) {
-        this.currentCounselor = counselor;        
+        this.currentCounselor = counselor;
         initComponents();
 
         FileHandler fileHandler = new FileHandler();
@@ -32,18 +34,23 @@ public class ViewAssignedAppointmentsFrame extends javax.swing.JFrame {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) appointmentTable.getModel();
 
         model.setRowCount(0);
-
-        for (Appointment appt : FileHandler.apptList) {
-            model.addRow(new Object[]{
-                appt.getApptID(),
-                appt.getStudentID(),
-                appt.getCounselorID(),
-                appt.getDate(),
-                appt.getStartTime(),
-                appt.getEndTime(),
-                appt.getBookingType(),
-                appt.getStatus()
-            });
+        
+        if (currentCounselor != null && currentCounselor.getID() != null) {
+            for (Appointment appt : FileHandler.apptList) {
+                // Check if the appointment's Counselor ID matches currentCounselor's ID
+                if (appt.getCounselorID() != null && appt.getCounselorID().equalsIgnoreCase(currentCounselor.getID())) {
+                    model.addRow(new Object[]{
+                        appt.getApptID(),
+                        appt.getStudentID(),
+                        appt.getCounselorID(),
+                        appt.getDate(),
+                        appt.getStartTime(),
+                        appt.getEndTime(),
+                        appt.getBookingType(),
+                        appt.getStatus()
+                    });
+                }
+            }
         }
 
         setSize(850, 540);
@@ -100,15 +107,23 @@ public class ViewAssignedAppointmentsFrame extends javax.swing.JFrame {
 
         appointmentTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Appointment ID", "Student ID", "Counselor ID", "Date", "Time", "Type", "Status"
+                "Appointment ID", "Student ID", "Counselor ID", "Date", "Start Time", "End Time", "Type", "Status"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(appointmentTable);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 70, 850, 470));
